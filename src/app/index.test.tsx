@@ -95,4 +95,3 @@ describe('HomePage (Native)', () => {
     expect(subtitle.props.style).toContainEqual(expect.objectContaining({ textAlign: 'left' }));
   });
 });
-

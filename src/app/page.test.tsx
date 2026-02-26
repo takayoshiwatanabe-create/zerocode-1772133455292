@@ -68,4 +68,3 @@ describe('HomePage (Web)', () => {
     expect(mainElement).not.toHaveClass('text-right');
   });
 });
-

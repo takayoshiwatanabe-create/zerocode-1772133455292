@@ -9,8 +9,8 @@ export default function GameLayout() {
 
   if (isLoading) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" color="#2563eb" />
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }} testID="activity-indicator-container">
+        <ActivityIndicator size="large" color="#2563eb" testID="activity-indicator" />
         <Text style={{ marginTop: 16, fontSize: 16, color: '#4b5563' }}>{t("loading")}</Text>
       </View>
     );

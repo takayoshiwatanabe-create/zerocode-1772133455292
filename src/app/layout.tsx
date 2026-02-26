@@ -11,7 +11,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Mystery Adventure ~World Job Encyclopedia~",
-  description: "子どもたちが遊びながら、経済・社会・文化を学ぶキッズ向けメタバース・アドベンチャー",
+  description: "子どもたちが遊びながら、世界中の様々な「お仕事」を体験し、経済・社会・文化を学ぶことができる教育アドベンチャーゲームです。安全なチャット機能で友達と交流し、ミニゲームでスキルを磨き、仮想通貨でアイテムを売買。保護者ダッシュボードで子どもの活動を透明に管理でき、安心してお使いいただけます。新しい発見と学びの旅に出かけましょう！",
 };
 
 export default function RootLayout({
@@ -36,4 +36,3 @@ export default function RootLayout({
     </html>
   );
 }
-

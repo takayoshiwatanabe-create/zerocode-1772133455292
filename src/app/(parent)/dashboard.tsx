@@ -73,6 +73,10 @@ export default function ParentDashboard() {
     setIsApprovingRejecting(false);
     setIsModalVisible(false);
     setSelectedPurchase(null);
+    // RULE-ECON-001: Parent approval for real money purchases.
+    // This would trigger an In-App Purchase (IAP) flow for 'real_money' items.
+    // For 'points' items, it would deduct points from the child's account.
+    // Current implementation is a mock, actual IAP integration (StoreKit/Google Play Billing) is required.
   };
 
   const handleRejectPurchase = async (purchaseId: string) => {

@@ -4,13 +4,18 @@
     "slug": "mystery-adventure-world-job-encyclopedia",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/app_icon.png",
     "scheme": "mystery-adventure-world-job-encyclopedia",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.mysteryadventure.worldjobencyclopedia"
+      "bundleIdentifier": "com.mysteryadventure.worldjobencyclopedia",
+      "buildNumber": "1.0.0",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "このアプリは、ゲーム内で仮想の場所を体験するために位置情報を使用します。実際の現在地は追跡されません。",
+        "NSCameraUsageDescription": "このアプリは、アバターのカスタマイズやゲーム内アイテムの作成にカメラを使用します。撮影された画像はデバイス外に共有されません。"
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -39,7 +44,12 @@
       "pt": "./locales/pt.json",
       "ar": "./locales/ar.json",
       "hi": "./locales/hi.json"
-    }
+    },
+    "splash": {
+      "image": "./assets/splash.png",
+      "backgroundColor": "#FFFBEB"
+    },
+    "description": "子どもたちが遊びながら、世界中の様々な「お仕事」を体験し、経済・社会・文化を学ぶことができる教育アドベンチャーゲームです。安全なチャット機能で友達と交流し、ミニゲームでスキルを磨き、仮想通貨でアイテムを売買。保護者ダッシュボードで子どもの活動を透明に管理でき、安心してお使いいただけます。新しい発見と学びの旅に出かけましょう！",
+    "privacyPolicyUrl": "https://www.example.com/privacy-policy"
   }
 }
-

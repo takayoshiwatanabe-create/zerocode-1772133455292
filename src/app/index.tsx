@@ -13,6 +13,7 @@ export default function HomePage() {
 
   return (
     <View
+      testID="home-page-container" // Added testID for easier testing
       style={[
         styles.container,
         {
@@ -73,4 +74,3 @@ const styles = StyleSheet.create({
     color: "#374151",
   },
 });
-

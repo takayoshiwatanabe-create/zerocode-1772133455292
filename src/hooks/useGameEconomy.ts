@@ -148,12 +148,10 @@ export function GameEconomyProvider({ children }: { children: ReactNode }) {
     }
   }, [isAuthenticated, user, points, adsWatchedToday]);
 
-  const canWatchAd = isAuthenticated && user && adsWatchedToday < MAX_ADS_PER_DAY;
-
   const economyContextValue = {
     points,
     adsWatchedToday,
-    canWatchAd,
+    canWatchAd: isAuthenticated && user && adsWatchedToday < MAX_ADS_PER_DAY,
     isLoading,
     error,
     watchAd,

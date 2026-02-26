@@ -198,6 +198,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signup = useCallback(async (email: string, password: string) => {
     setState((prevState) => ({ ...prevState, isLoading: true, error: null }));
     try {
+      // The signup mock API returns { user, token } but we don't need to store token here
+      // as the user is expected to log in after signup.
       await mockApi.signup(email, password);
       setState((prevState) => ({
         ...prevState,

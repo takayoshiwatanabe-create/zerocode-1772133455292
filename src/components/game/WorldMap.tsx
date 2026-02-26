@@ -93,18 +93,18 @@ export function WorldMap({ playerLevel, currentLocation, onLocationSelect }: Wor
         );
       })}
 
-      <View style={[styles.legendContainer, { alignItems: isRTL ? 'flex-end' : 'flex-start' }]}>
+      <View style={[styles.legendContainer, { alignItems: isRTL ? 'flex-end' : 'flex-start', [isRTL ? 'left' : 'right']: 10 }]}>
         <Text style={styles.legendTitle}>{t("game_map_legend_title" as TranslationKeys)}</Text>
         <View style={[styles.legendItem, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-          <View style={[styles.legendColorBox, { backgroundColor: '#fcd34d' }]} />
+          <View style={[styles.legendColorBox, { backgroundColor: '#fcd34d', marginLeft: isRTL ? 8 : 0, marginRight: isRTL ? 0 : 8 }]} />
           <Text style={styles.legendText}>{t("game_map_legend_current_location" as TranslationKeys)}</Text>
         </View>
         <View style={[styles.legendItem, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-          <View style={[styles.legendColorBox, { backgroundColor: '#3b82f6' }]} />
+          <View style={[styles.legendColorBox, { backgroundColor: '#3b82f6', marginLeft: isRTL ? 8 : 0, marginRight: isRTL ? 0 : 8 }]} />
           <Text style={styles.legendText}>{t("game_map_legend_unlocked_location" as TranslationKeys)}</Text>
         </View>
         <View style={[styles.legendItem, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-          <View style={[styles.legendColorBox, { backgroundColor: '#9ca3af' }]} />
+          <View style={[styles.legendColorBox, { backgroundColor: '#9ca3af', marginLeft: isRTL ? 8 : 0, marginRight: isRTL ? 0 : 8 }]} />
           <Text style={styles.legendText}>{t("game_map_legend_locked_location" as TranslationKeys)}</Text>
         </View>
       </View>

@@ -25,3 +25,23 @@
 [dir="ltr"] input[type="number"] {
   text-align: left;
 }
+
+/* Base styles for web to match React Native's default text styles */
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Reset for Next.js 15 RC */
+html, body, #__next {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Ensure full height for main content */
+main {
+  min-height: 100vh;
+}
+

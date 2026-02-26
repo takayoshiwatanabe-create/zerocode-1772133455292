@@ -36,14 +36,8 @@
     "i18n/**/*.ts",
     "i18n/**/*.tsx",
     "tailwind.config.ts",
-    "app/**/*.ts",
-    "app/**/*.tsx",
-    "components/**/*.ts",
-    "components/**/*.tsx",
-    "hooks/**/*.ts",
-    "hooks/**/*.tsx",
-    "types/**/*.ts",
-    "types/**/*.tsx"
+    "src/**/*.ts",
+    "src/**/*.tsx"
   ],
   "exclude": [
     "node_modules"

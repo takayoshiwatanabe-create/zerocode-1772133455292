@@ -252,3 +252,4 @@ export const translations: Record<Language, Record<string, string>> = {
     auth_success_welcome: "स्वागत है, {{nickname}}!"
   }
 };
+

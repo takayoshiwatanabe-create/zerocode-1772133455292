@@ -5,6 +5,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { t } from "@/i18n";
 import { getIsRTL } from "@/i18n";
 import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, Platform, TextStyle } from "react-native";
+import { useRouter } from "expo-router"; // Import useRouter
 
 type AuthMode = "signup" | "login" | "mfa";
 
@@ -16,6 +17,7 @@ export function AuthForm() {
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const { login, signup, verifyMfa, isLoading, isAuthenticated, user, mfaRequired } = useAuth();
+  const router = useRouter(); // Initialize useRouter
 
   const isRTL = getIsRTL();
 
@@ -23,9 +25,10 @@ export function AuthForm() {
     if (isAuthenticated && user) {
       setSuccessMessage(t("auth_success_welcome", { nickname: user.nickname }));
       setError(null);
-      // Optionally redirect or close form
+      // Redirect to parent dashboard after successful login/MFA verification
+      router.replace("/(parent)/dashboard");
     }
-  }, [isAuthenticated, user]);
+  }, [isAuthenticated, user, router]);
 
   useEffect(() => {
     if (mfaRequired) {

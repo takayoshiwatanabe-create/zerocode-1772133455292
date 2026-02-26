@@ -24,7 +24,19 @@ export const translations: Record<Language, Record<string, string>> = {
     login_success: "ログインに成功しました！",
     signup_success: "サインアップに成功しました！ログインしてください。",
     mfa_success: "MFA認証に成功しました！",
-    auth_success_welcome: "ようこそ、{{nickname}}さん！"
+    auth_success_welcome: "ようこそ、{{nickname}}さん！",
+    parent_dashboard_title_short: "保護者ダッシュボード",
+    parent_dashboard_title: "{{nickname}}さんの保護者ダッシュボード",
+    parent_dashboard_children_overview: "お子様の活動概要",
+    parent_dashboard_pending_approvals: "保留中の承認",
+    parent_dashboard_no_pending_approvals: "現在、保留中の承認はありません。",
+    parent_dashboard_unauthorized: "保護者ダッシュボードにアクセスするにはログインが必要です。",
+    child_activity_card_last_active: "最終アクティブ:",
+    child_activity_card_points: "ポイント:",
+    child_activity_card_stock_holdings: "株保有数:",
+    child_activity_card_pending_purchases: "保留中の購入:",
+    child_activity_card_view_details: "詳細を見る",
+    locale_code: "ja-JP"
   },
   en: {
     app_name: "Mystery Adventure ~World Job Encyclopedia~",
@@ -49,7 +61,19 @@ export const translations: Record<Language, Record<string, string>> = {
     login_success: "Login successful!",
     signup_success: "Sign up successful! Please log in.",
     mfa_success: "MFA verification successful!",
-    auth_success_welcome: "Welcome, {{nickname}}!"
+    auth_success_welcome: "Welcome, {{nickname}}!",
+    parent_dashboard_title_short: "Parent Dashboard",
+    parent_dashboard_title: "Parent Dashboard for {{nickname}}",
+    parent_dashboard_children_overview: "Children's Activity Overview",
+    parent_dashboard_pending_approvals: "Pending Approvals",
+    parent_dashboard_no_pending_approvals: "No pending approvals at this time.",
+    parent_dashboard_unauthorized: "Login required to access Parent Dashboard.",
+    child_activity_card_last_active: "Last Active:",
+    child_activity_card_points: "Points:",
+    child_activity_card_stock_holdings: "Stock Holdings:",
+    child_activity_card_pending_purchases: "Pending Purchases:",
+    child_activity_card_view_details: "View Details",
+    locale_code: "en-US"
   },
   zh: {
     app_name: "神秘冒险～环游世界职业图鉴～",
@@ -74,7 +98,19 @@ export const translations: Record<Language, Record<string, string>> = {
     login_success: "登录成功！",
     signup_success: "注册成功！请登录。",
     mfa_success: "MFA 验证成功！",
-    auth_success_welcome: "欢迎，{{nickname}}！"
+    auth_success_welcome: "欢迎，{{nickname}}！",
+    parent_dashboard_title_short: "家长仪表板",
+    parent_dashboard_title: "{{nickname}}的家长仪表板",
+    parent_dashboard_children_overview: "孩子活动概览",
+    parent_dashboard_pending_approvals: "待处理的批准",
+    parent_dashboard_no_pending_approvals: "目前没有待处理的批准。",
+    parent_dashboard_unauthorized: "访问家长仪表板需要登录。",
+    child_activity_card_last_active: "上次活动时间:",
+    child_activity_card_points: "积分:",
+    child_activity_card_stock_holdings: "股票持有量:",
+    child_activity_card_pending_purchases: "待处理购买:",
+    child_activity_card_view_details: "查看详情",
+    locale_code: "zh-CN"
   },
   ko: {
     app_name: "미스터리 어드벤처 ~세계를 여행하는 직업 도감~~",
@@ -99,7 +135,19 @@ export const translations: Record<Language, Record<string, string>> = {
     login_success: "로그인 성공!",
     signup_success: "회원가입 성공! 로그인해주세요.",
     mfa_success: "MFA 인증 성공!",
-    auth_success_welcome: "환영합니다, {{nickname}}님!"
+    auth_success_welcome: "환영합니다, {{nickname}}님!",
+    parent_dashboard_title_short: "학부모 대시보드",
+    parent_dashboard_title: "{{nickname}}님의 학부모 대시보드",
+    parent_dashboard_children_overview: "자녀 활동 개요",
+    parent_dashboard_pending_approvals: "승인 대기 중",
+    parent_dashboard_no_pending_approvals: "현재 승인 대기 중인 항목이 없습니다.",
+    parent_dashboard_unauthorized: "학부모 대시보드에 접근하려면 로그인이 필요합니다.",
+    child_activity_card_last_active: "최근 활동:",
+    child_activity_card_points: "포인트:",
+    child_activity_card_stock_holdings: "주식 보유량:",
+    child_activity_card_pending_purchases: "보류 중인 구매:",
+    child_activity_card_view_details: "세부 정보 보기",
+    locale_code: "ko-KR"
   },
   es: {
     app_name: "Aventura Misteriosa ~Enciclopedia de Trabajos del Mundo~",
@@ -124,7 +172,19 @@ export const translations: Record<Language, Record<string, string>> = {
     login_success: "¡Inicio de sesión exitoso!",
     signup_success: "¡Registro exitoso! Por favor, inicia sesión.",
     mfa_success: "¡Verificación MFA exitosa!",
-    auth_success_welcome: "¡Bienvenido, {{nickname}}!"
+    auth_success_welcome: "¡Bienvenido, {{nickname}}!",
+    parent_dashboard_title_short: "Panel de Control para Padres",
+    parent_dashboard_title: "Panel de Control para Padres de {{nickname}}",
+    parent_dashboard_children_overview: "Resumen de Actividad de los Niños",
+    parent_dashboard_pending_approvals: "Aprobaciones Pendientes",
+    parent_dashboard_no_pending_approvals: "No hay aprobaciones pendientes en este momento.",
+    parent_dashboard_unauthorized: "Se requiere iniciar sesión para acceder al Panel de Control para Padres.",
+    child_activity_card_last_active: "Última actividad:",
+    child_activity_card_points: "Puntos:",
+    child_activity_card_stock_holdings: "Tenencias de acciones:",
+    child_activity_card_pending_purchases: "Compras pendientes:",
+    child_activity_card_view_details: "Ver detalles",
+    locale_code: "es-ES"
   },
   fr: {
     app_name: "Aventure Mystère ~Encyclopédie des Métiers du Monde~",
@@ -149,7 +209,19 @@ export const translations: Record<Language, Record<string, string>> = {
     login_success: "Connexion réussie !",
     signup_success: "Inscription réussie ! Veuillez vous connecter.",
     mfa_success: "Vérification MFA réussie !",
-    auth_success_welcome: "Bienvenue, {{nickname}} !"
+    auth_success_welcome: "Bienvenue, {{nickname}} !",
+    parent_dashboard_title_short: "Tableau de bord Parent",
+    parent_dashboard_title: "Tableau de bord Parent de {{nickname}}",
+    parent_dashboard_children_overview: "Aperçu de l'activité des enfants",
+    parent_dashboard_pending_approvals: "Approbations en attente",
+    parent_dashboard_no_pending_approvals: "Aucune approbation en attente pour le moment.",
+    parent_dashboard_unauthorized: "Connexion requise pour accéder au Tableau de bord Parent.",
+    child_activity_card_last_active: "Dernière activité:",
+    child_activity_card_points: "Points:",
+    child_activity_card_stock_holdings: "Participations boursières:",
+    child_activity_card_pending_purchases: "Achats en attente:",
+    child_activity_card_view_details: "Voir les détails",
+    locale_code: "fr-FR"
   },
   de: {
     app_name: "Mysterienabenteuer ~Weltberufe-Enzyklopädie~",
@@ -174,7 +246,19 @@ export const translations: Record<Language, Record<string, string>> = {
     login_success: "Anmeldung erfolgreich!",
     signup_success: "Registrierung erfolgreich! Bitte melden Sie sich an.",
     mfa_success: "MFA-Verifizierung erfolgreich!",
-    auth_success_welcome: "Willkommen, {{nickname}}!"
+    auth_success_welcome: "Willkommen, {{nickname}}!",
+    parent_dashboard_title_short: "Eltern-Dashboard",
+    parent_dashboard_title: "Eltern-Dashboard für {{nickname}}",
+    parent_dashboard_children_overview: "Übersicht der Kinderaktivitäten",
+    parent_dashboard_pending_approvals: "Ausstehende Genehmigungen",
+    parent_dashboard_no_pending_approvals: "Derzeit keine ausstehenden Genehmigungen.",
+    parent_dashboard_unauthorized: "Anmeldung erforderlich, um auf das Eltern-Dashboard zuzugreifen.",
+    child_activity_card_last_active: "Zuletzt aktiv:",
+    child_activity_card_points: "Punkte:",
+    child_activity_card_stock_holdings: "Aktienbestände:",
+    child_activity_card_pending_purchases: "Ausstehende Käufe:",
+    child_activity_card_view_details: "Details anzeigen",
+    locale_code: "de-DE"
   },
   pt: {
     app_name: "Aventura Misteriosa ~Enciclopédia de Profissões do Mundo~",
@@ -199,7 +283,19 @@ export const translations: Record<Language, Record<string, string>> = {
     login_success: "Login bem-sucedido!",
     signup_success: "Cadastro bem-sucedido! Por favor, faça login.",
     mfa_success: "Verificação MFA bem-sucedida!",
-    auth_success_welcome: "Bem-vindo, {{nickname}}!"
+    auth_success_welcome: "Bem-vindo, {{nickname}}!",
+    parent_dashboard_title_short: "Painel dos Pais",
+    parent_dashboard_title: "Painel dos Pais para {{nickname}}",
+    parent_dashboard_children_overview: "Visão Geral da Atividade dos Filhos",
+    parent_dashboard_pending_approvals: "Aprovações Pendentes",
+    parent_dashboard_no_pending_approvals: "Nenhuma aprovação pendente no momento.",
+    parent_dashboard_unauthorized: "É necessário fazer login para acessar o Painel dos Pais.",
+    child_activity_card_last_active: "Última atividade:",
+    child_activity_card_points: "Pontos:",
+    child_activity_card_stock_holdings: "Participações em ações:",
+    child_activity_card_pending_purchases: "Compras pendentes:",
+    child_activity_card_view_details: "Ver detalhes",
+    locale_code: "pt-BR"
   },
   ar: {
     app_name: "مغامرة الغموض ~موسوعة وظائف العالم~",
@@ -224,7 +320,19 @@ export const translations: Record<Language, Record<string, string>> = {
     login_success: "تم تسجيل الدخول بنجاح!",
     signup_success: "تم التسجيل بنجاح! يرجى تسجيل الدخول.",
     mfa_success: "تم التحقق من MFA بنجاح!",
-    auth_success_welcome: "أهلاً بك، {{nickname}}!"
+    auth_success_welcome: "أهلاً بك، {{nickname}}!",
+    parent_dashboard_title_short: "لوحة تحكم الوالدين",
+    parent_dashboard_title: "لوحة تحكم الوالدين لـ {{nickname}}",
+    parent_dashboard_children_overview: "نظرة عامة على نشاط الأطفال",
+    parent_dashboard_pending_approvals: "الموافقات المعلقة",
+    parent_dashboard_no_pending_approvals: "لا توجد موافقات معلقة في الوقت الحالي.",
+    parent_dashboard_unauthorized: "يتطلب تسجيل الدخول للوصول إلى لوحة تحكم الوالدين.",
+    child_activity_card_last_active: "آخر نشاط:",
+    child_activity_card_points: "النقاط:",
+    child_activity_card_stock_holdings: "حيازات الأسهم:",
+    child_activity_card_pending_purchases: "المشتريات المعلقة:",
+    child_activity_card_view_details: "عرض التفاصيل",
+    locale_code: "ar-SA"
   },
   hi: {
     app_name: "रहस्य साहसिक ~विश्व नौकरी विश्वकोश~",
@@ -249,6 +357,18 @@ export const translations: Record<Language, Record<string, string>> = {
     login_success: "लॉगिन सफल!",
     signup_success: "साइन अप सफल! कृपया लॉगिन करें।",
     mfa_success: "MFA सत्यापन सफल!",
-    auth_success_welcome: "स्वागत है, {{nickname}}!"
+    auth_success_welcome: "स्वागत है, {{nickname}}!",
+    parent_dashboard_title_short: "अभिभावक डैशबोर्ड",
+    parent_dashboard_title: "{{nickname}} का अभिभावक डैशबोर्ड",
+    parent_dashboard_children_overview: "बच्चों की गतिविधि का अवलोकन",
+    parent_dashboard_pending_approvals: "लंबित स्वीकृतियाँ",
+    parent_dashboard_no_pending_approvals: "वर्तमान में कोई लंबित स्वीकृतियाँ नहीं हैं।",
+    parent_dashboard_unauthorized: "अभिभावक डैशबोर्ड तक पहुँचने के लिए लॉगिन आवश्यक है।",
+    child_activity_card_last_active: "अंतिम सक्रिय:",
+    child_activity_card_points: "अंक:",
+    child_activity_card_stock_holdings: "स्टॉक होल्डिंग्स:",
+    child_activity_card_pending_purchases: "लंबित खरीद:",
+    child_activity_card_view_details: "विवरण देखें",
+    locale_code": "hi-IN"
   }
 };

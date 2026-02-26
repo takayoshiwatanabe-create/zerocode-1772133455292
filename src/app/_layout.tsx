@@ -3,6 +3,8 @@ import { I18nProvider } from "@/i18n/I18nProvider";
 import { useEffect } from "react";
 import { I18nManager } from "react-native";
 import { getIsRTL, getLang } from "@/i18n"; // Import getLang and getIsRTL
+import { SafeAreaProvider } from "react-native-safe-area-context";
+import { StatusBar } from "expo-status-bar";
 
 export default function RootLayout() {
   const lang = getLang();
@@ -21,10 +23,14 @@ export default function RootLayout() {
 
   return (
     <I18nProvider>
-      <Stack>
-        <Stack.Screen name="index" options={{ headerShown: false }} />
-        {/* Add other screens here */}
-      </Stack>
+      <SafeAreaProvider>
+        <Stack>
+          <Stack.Screen name="index" options={{ headerShown: false }} />
+          <Stack.Screen name="(parent)" options={{ headerShown: false }} />
+          {/* Add other screens here */}
+        </Stack>
+        <StatusBar style="auto" />
+      </SafeAreaProvider>
     </I18nProvider>
   );
 }

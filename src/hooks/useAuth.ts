@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { UserProfile } from "@/types";
 import { t } from "@/i18n";
+import { Platform } from "react-native"; // Import Platform for conditional storage
 
 // Extend UserProfile to include MFA status
 interface AuthUserProfile extends UserProfile {
@@ -95,32 +96,39 @@ const initialState: AuthState = {
 export function useAuth() {
   const [state, setState] = useState<AuthState>(initialState);
 
-  // Load auth state from localStorage on initial render
+  // Load auth state from storage on initial render
   useEffect(() => {
-    try {
-      // The design spec explicitly states: "No `localStorage` for React Native: Persistent storage (e.g., `AsyncStorage`) is not implemented in this mock for RN, but noted as a future consideration."
-      // For web, localStorage would be appropriate. Given the dual platform nature, a platform-specific storage solution would be needed.
-      // For now, keeping it commented out as per the spec's intent for this mock.
-      // if (typeof window !== 'undefined' && window.localStorage) { // Check for web environment
-      //   const storedToken = localStorage.getItem("authToken");
-      //   const storedUser = localStorage.getItem("authUser");
-      //   if (storedToken && storedUser) {
-      //     const user = JSON.parse(storedUser) as AuthUserProfile;
-      //     setState((prevState) => ({
-      //       ...prevState,
-      //       isAuthenticated: true,
-      //       user,
-      //       token: storedToken,
-      //     }));
-      //   }
-      // }
-    } catch (e) {
-      console.error("Failed to load auth state from storage", e);
-      // if (typeof window !== 'undefined' && window.localStorage) {
-      //   localStorage.removeItem("authToken");
-      //   localStorage.removeItem("authUser");
-      // }
-    }
+    const loadAuthState = async () => {
+      try {
+        let storedToken: string | null = null;
+        let storedUser: string | null = null;
+
+        if (Platform.OS === 'web' && typeof window !== 'undefined' && window.localStorage) {
+          storedToken = localStorage.getItem("authToken");
+          storedUser = localStorage.getItem("authUser");
+        }
+        // For React Native, AsyncStorage would be used here.
+        // As per spec: "Persistent storage (e.g., AsyncStorage) is not implemented in this mock for RN, but noted as a future consideration."
+        // So, for RN, storedToken and storedUser will remain null in this mock.
+
+        if (storedToken && storedUser) {
+          const user = JSON.parse(storedUser) as AuthUserProfile;
+          setState((prevState) => ({
+            ...prevState,
+            isAuthenticated: true,
+            user,
+            token: storedToken,
+          }));
+        }
+      } catch (e) {
+        console.error("Failed to load auth state from storage", e);
+        if (Platform.OS === 'web' && typeof window !== 'undefined' && window.localStorage) {
+          localStorage.removeItem("authToken");
+          localStorage.removeItem("authUser");
+        }
+      }
+    };
+    loadAuthState();
   }, []);
 
   const login = useCallback(async (email: string, password: string) => {
@@ -136,10 +144,10 @@ export function useAuth() {
           error: null, // Clear error, as MFA prompt is not an error
         }));
       } else {
-        // if (typeof window !== 'undefined' && window.localStorage) {
-        //   localStorage.setItem("authToken", token);
-        //   localStorage.setItem("authUser", JSON.stringify(user));
-        // }
+        if (Platform.OS === 'web' && typeof window !== 'undefined' && window.localStorage) {
+          localStorage.setItem("authToken", token);
+          localStorage.setItem("authUser", JSON.stringify(user));
+        }
         setState((prevState) => ({
           ...prevState,
           isAuthenticated: true,
@@ -188,10 +196,10 @@ export function useAuth() {
     setState((prevState) => ({ ...prevState, isLoading: true, error: null }));
     try {
       const { user, token } = await mockApi.verifyMfa(email, code);
-      // if (typeof window !== 'undefined' && window.localStorage) {
-      //   localStorage.setItem("authToken", token);
-      //   localStorage.setItem("authUser", JSON.stringify(user));
-      // }
+      if (Platform.OS === 'web' && typeof window !== 'undefined' && window.localStorage) {
+        localStorage.setItem("authToken", token);
+        localStorage.setItem("authUser", JSON.stringify(user));
+      }
       setState((prevState) => ({
         ...prevState,
         isAuthenticated: true,
@@ -214,10 +222,10 @@ export function useAuth() {
     setState((prevState) => ({ ...prevState, isLoading: true, error: null }));
     try {
       await mockApi.logout();
-      // if (typeof window !== 'undefined' && window.localStorage) {
-      //   localStorage.removeItem("authToken");
-      //   localStorage.removeItem("authUser");
-      // }
+      if (Platform.OS === 'web' && typeof window !== 'undefined' && window.localStorage) {
+        localStorage.removeItem("authToken");
+        localStorage.removeItem("authUser");
+      }
       setState(initialState);
     } catch (err: any) {
       setState((prevState) => ({

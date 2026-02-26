@@ -25,7 +25,8 @@ export default function RootLayout() {
     <I18nProvider>
       <SafeAreaProvider>
         <Stack>
-          <Stack.Screen name="index" options={{ title: "Home" }} />
+          <Stack.Screen name="index" options={{ headerShown: false }} />
+          <Stack.Screen name="(parent)" options={{ headerShown: false }} />
           {/* Add other routes here as they are created */}
         </Stack>
         <StatusBar style="auto" />

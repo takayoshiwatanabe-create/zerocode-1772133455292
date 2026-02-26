@@ -1,14 +1,14 @@
-import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { I18nProvider } from "@/i18n/I18nProvider";
 import { getLang, getIsRTL } from "@/i18n"; // Import functions for server-side
+import { Metadata } from "next"; // Import Metadata type
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Mystery Adventure",
-  description: "World Job Encyclopedia",
+  title: "Mystery Adventure ~World Job Encyclopedia~",
+  description: "子どもたちが遊びながら、経済・社会・文化を学ぶキッズ向けメタバース・アドベンチャー",
 };
 
 export default function RootLayout({

@@ -41,8 +41,9 @@
     "autoprefixer": "^10.4.19",
     "@types/i18next": "^13.0.0",
     "@types/i18next-browser-languagedetector": "^3.0.0",
-    "@types/expo-localization": "^15.0.0",
-    "@types/tailwindcss": "^4.0.0-alpha.14"
+    "@types/expo-localization": "^15.0.3",
+    "@types/tailwindcss": "^4.0.0-alpha.14",
+    "@types/node": "^20.14.2"
   },
   "resolutions": {
     "react": "18.2.0",

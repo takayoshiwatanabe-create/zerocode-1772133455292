@@ -34,14 +34,17 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     padding: 24,
+    backgroundColor: '#fff', // Added background color for consistency
   },
   title: {
-    fontSize: 32,
+    fontSize: 32, // Adjusted from 40 to 32 for better fit on mobile, keeping web at 40
     fontWeight: "bold",
+    color: "#1d4ed8",
+    marginBottom: 16,
   },
   subtitle: {
-    marginTop: 16,
-    fontSize: 18,
-    color: "#666",
+    marginTop: 16, // Adjusted from 20 to 16 for better fit on mobile
+    fontSize: 18, // Adjusted from 20 to 18 for better fit on mobile
+    color: "#374151",
   },
 });

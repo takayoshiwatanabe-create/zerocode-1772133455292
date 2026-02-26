@@ -21,5 +21,17 @@
   "login_success": "Login successful!",
   "signup_success": "Sign up successful! Please log in.",
   "mfa_success": "MFA verification successful!",
-  "auth_success_welcome": "Welcome, {{nickname}}!"
+  "auth_success_welcome": "Welcome, {{nickname}}!",
+  "parent_dashboard_title_short": "Parent Dashboard",
+  "parent_dashboard_title": "Parent Dashboard for {{nickname}}",
+  "parent_dashboard_children_overview": "Children's Activity Overview",
+  "parent_dashboard_pending_approvals": "Pending Approvals",
+  "parent_dashboard_no_pending_approvals": "No pending approvals at this time.",
+  "parent_dashboard_unauthorized": "Login required to access Parent Dashboard.",
+  "child_activity_card_last_active": "Last Active:",
+  "child_activity_card_points": "Points:",
+  "child_activity_card_stock_holdings": "Stock Holdings:",
+  "child_activity_card_pending_purchases": "Pending Purchases:",
+  "child_activity_card_view_details": "View Details",
+  "locale_code": "en-US"
 }

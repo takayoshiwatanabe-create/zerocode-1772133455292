@@ -21,5 +21,17 @@
   "login_success": "ログインに成功しました！",
   "signup_success": "サインアップに成功しました！ログインしてください。",
   "mfa_success": "MFA認証に成功しました！",
-  "auth_success_welcome": "ようこそ、{{nickname}}さん！"
+  "auth_success_welcome": "ようこそ、{{nickname}}さん！",
+  "parent_dashboard_title_short": "保護者ダッシュボード",
+  "parent_dashboard_title": "{{nickname}}さんの保護者ダッシュボード",
+  "parent_dashboard_children_overview": "お子様の活動概要",
+  "parent_dashboard_pending_approvals": "保留中の承認",
+  "parent_dashboard_no_pending_approvals": "現在、保留中の承認はありません。",
+  "parent_dashboard_unauthorized": "保護者ダッシュボードにアクセスするにはログインが必要です。",
+  "child_activity_card_last_active": "最終アクティブ:",
+  "child_activity_card_points": "ポイント:",
+  "child_activity_card_stock_holdings": "株保有数:",
+  "child_activity_card_pending_purchases": "保留中の購入:",
+  "child_activity_card_view_details": "詳細を見る",
+  "locale_code": "ja-JP"
 }

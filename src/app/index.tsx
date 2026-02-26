@@ -1,43 +1,69 @@
-import { Text, View } from "react-native";
+import { Text, View, StyleSheet } from "react-native";
 import { t } from "@/i18n";
 import { getIsRTL, getLang } from "@/i18n";
-import { AuthForm } from "@/components/auth/AuthForm"; // Import AuthForm
+import { AuthForm } from "@/components/auth/AuthForm";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 export default function HomePage() {
+  const insets = useSafeAreaInsets();
   const currentLang = getLang();
-  const isRTL = getIsRTL(currentLang); // Corrected variable name from isRRTL to isRTL
+  const isRTL = getIsRTL(currentLang);
 
   return (
     <View
-      style={{
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
-        padding: 24, // p-6 is 24px
-      }}
+      style={[
+        styles.container,
+        {
+          paddingTop: insets.top,
+          paddingBottom: insets.bottom,
+          paddingLeft: insets.left,
+          paddingRight: insets.right,
+        },
+      ]}
     >
       <Text
-        style={{
-          fontSize: 40, // text-5xl
-          fontWeight: "bold",
-          color: "#1d4ed8", // text-blue-700
-          marginBottom: 16, // mb-4
-          textAlign: isRTL ? "right" : "left", // Apply text alignment here
-        }}
+        style={[
+          styles.title,
+          {
+            textAlign: isRTL ? "right" : "left",
+          },
+        ]}
       >
         {t("app_name")}
       </Text>
       <Text
-        style={{
-          fontSize: 20, // text-xl
-          color: "#374151", // text-gray-700
-          textAlign: isRTL ? "right" : "left", // Apply text alignment here
-          marginBottom: 32, // Added mb-8 for spacing as per web version
-        }}
+        style={[
+          styles.subtitle,
+          {
+            textAlign: isRTL ? "right" : "left",
+            marginBottom: 32,
+          },
+        ]}
       >
         {t("welcome_message")}
       </Text>
-      <AuthForm /> {/* Integrate AuthForm here */}
+      <AuthForm />
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 24,
+    backgroundColor: '#fff', // Added background color for consistency
+  },
+  title: {
+    fontSize: 32, // Adjusted from 40 to 32 for better fit on mobile, keeping web at 40
+    fontWeight: "bold",
+    color: "#1d4ed8",
+    marginBottom: 16,
+  },
+  subtitle: {
+    marginTop: 16, // Adjusted from 20 to 16 for better fit on mobile
+    fontSize: 18, // Adjusted from 20 to 18 for better fit on mobile
+    color: "#374151",
+  },
+});

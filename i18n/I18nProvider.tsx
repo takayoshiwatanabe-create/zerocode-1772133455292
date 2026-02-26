@@ -48,7 +48,6 @@ export function I18nProvider({ children }: I18nProviderProps) {
       if (I18nManager.isRTL !== isRTL) {
         I18nManager.forceRTL(isRTL);
         I18nManager.allowRTL(isRTL);
-        // Note: Forcing RTL might require a reload for some components to fully adjust.
         // For simplicity in this example, we just force it.
       }
     }

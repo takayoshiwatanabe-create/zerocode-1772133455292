@@ -1,7 +1,6 @@
 import Phaser from 'phaser';
 import { TranslationKeys } from '@/i18n/translations';
 
-// Define a type for the data passed to the scene
 interface JobSceneData {
   minigameId: string;
   onGameComplete: (score: number) => void;
@@ -11,19 +10,14 @@ interface JobSceneData {
 
 export class JobScene extends Phaser.Scene {
   private minigameId: string = '';
-  private onGameComplete!: (score: number) => void;
+  private onGameComplete: ((score: number) => void) | null = null;
   private isRTL: boolean = false;
-  private t!: (key: TranslationKeys, options?: any) => string;
+  private t: ((key: TranslationKeys, options?: any) => string) | null = null;
 
   private score: number = 0;
-  private scoreText!: Phaser.GameObjects.Text;
-  private timerEvent!: Phaser.Time.TimerEvent;
-  private timeLeft: number = 30; // 30 seconds game
-  private timerText!: Phaser.GameObjects.Text;
-
-  private player!: Phaser.Physics.Arcade.Sprite;
-  private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
-  private items!: Phaser.Physics.Arcade.Group;
+  private scoreText: Phaser.GameObjects.Text | null = null;
+  private timerEvent: Phaser.Time.TimerEvent | null = null;
+  private timeLeft: number = 30; // 30 seconds for the minigame
 
   constructor() {
     super('JobScene');
@@ -36,153 +30,162 @@ export class JobScene extends Phaser.Scene {
     this.t = data.t;
     this.score = 0;
     this.timeLeft = 30;
-    console.log(`JobScene initialized for minigame: ${this.minigameId}`);
+    console.log(`JobScene initialized for minigame: ${this.minigameId}, RTL: ${this.isRTL}`);
   }
 
   preload() {
     // Load assets based on minigameId
-    switch (this.minigameId) {
-      case 'farmer':
-        this.load.image('sky', 'https://labs.phaser.io/assets/skies/sky4.png');
-        this.load.image('ground', 'https://labs.phaser.io/assets/platform.png');
-        this.load.image('carrot', 'https://labs.phaser.io/assets/sprites/carrot.png');
-        this.load.image('player', 'https://labs.phaser.io/assets/sprites/dude.png'); // Placeholder player
-        break;
-      case 'baker':
-        this.load.image('kitchen_bg', 'https://labs.phaser.io/assets/skies/sky3.png'); // Placeholder background
-        this.load.image('table', 'https://labs.phaser.io/assets/platform.png'); // Placeholder table
-        this.load.image('flour', 'https://labs.phaser.io/assets/sprites/gem.png'); // Placeholder item
-        this.load.image('oven', 'https://labs.phaser.io/assets/sprites/bomb.png'); // Placeholder hazard
-        this.load.image('chef', 'https://labs.phaser.io/assets/sprites/phaser-dude.png'); // Placeholder player
-        break;
-      default:
-        // Fallback assets
-        this.load.image('sky', 'https://labs.phaser.io/assets/skies/space3.png');
-        this.load.image('ground', 'https://labs.phaser.io/assets/platform.png');
-        this.load.image('star', 'https://labs.phaser.io/assets/sprites/star.png');
-        this.load.image('bomb', 'https://labs.phaser.io/assets/sprites/bomb.png');
-        this.load.image('player', 'https://labs.phaser.io/assets/sprites/dude.png');
-        break;
+    // Example:
+    if (this.minigameId === 'farmer') {
+      this.load.image('sky', 'https://labs.phaser.io/assets/skies/sky4.png');
+      this.load.image('ground', 'https://labs.phaser.io/assets/platform.png');
+      this.load.image('carrot', 'https://labs.phaser.io/assets/sprites/carrot.png');
+      this.load.image('player', 'https://labs.phaser.io/assets/sprites/dude.png');
+    } else if (this.minigameId === 'baker') {
+      this.load.image('bakery_bg', 'https://via.placeholder.com/800x600/fce4ec/880e4f?text=Bakery');
+      this.load.image('dough', 'https://via.placeholder.com/50x50/ffcc80/000000?text=Dough');
+      this.load.image('oven', 'https://via.placeholder.com/100x100/bdbdbd/000000?text=Oven');
     }
+    // Add more asset loading for other minigames
   }
 
   create() {
+    if (!this.t) {
+      console.error("Translation function 't' not available in JobScene.");
+      return;
+    }
+
     // Background
-    this.add.image(400, 300, 'sky').setScale(2); // Scale to fit if needed
+    if (this.minigameId === 'farmer') {
+      this.add.image(400, 300, 'sky').setScale(1.5);
+      const platforms = this.physics.add.staticGroup();
+      platforms.create(400, 568, 'ground').setScale(2).refreshBody();
+      platforms.create(600, 400, 'ground');
+      platforms.create(50, 250, 'ground');
+      platforms.create(750, 220, 'ground');
 
-    // Platforms
-    const platforms = this.physics.add.staticGroup();
-    platforms.create(400, 568, 'ground').setScale(2).refreshBody();
-    platforms.create(600, 400, 'ground');
-    platforms.create(50, 250, 'ground');
-    platforms.create(750, 220, 'ground');
+      // Player
+      const player = this.physics.add.sprite(100, 450, 'player');
+      player.setBounce(0.2);
+      player.setCollideWorldBounds(true);
+      this.physics.add.collider(player, platforms);
 
-    // Player
-    this.player = this.physics.add.sprite(100, 450, 'player');
-    this.player.setBounce(0.2);
-    this.player.setCollideWorldBounds(true);
-    this.physics.add.collider(this.player, platforms);
+      // Carrots (collectible items)
+      const carrots = this.physics.add.group({
+        key: 'carrot',
+        repeat: 11,
+        setXY: { x: 12, y: 0, stepX: 70 }
+      });
 
-    // Cursors for input
-    this.cursors = this.input.keyboard!.createCursorKeys();
+      carrots.children.iterate((child: Phaser.GameObjects.GameObject) => {
+        (child as Phaser.Physics.Arcade.Sprite).setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+        return true; // Indicate that iteration should continue
+      });
 
-    // Items to collect
-    this.items = this.physics.add.group({
-      key: this.minigameId === 'farmer' ? 'carrot' : 'star',
-      repeat: 11,
-      setXY: { x: 12, y: 0, stepX: 70 },
-    });
+      this.physics.add.collider(carrots, platforms);
+      this.physics.add.overlap(player, carrots, this.collectCarrot, undefined, this);
 
-    this.items.children.iterate((child) => {
-      (child as Phaser.Physics.Arcade.Image).setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
-      this.physics.add.collider(child, platforms);
-      return true;
-    });
+      // Simple player controls
+      const cursors = this.input.keyboard?.createCursorKeys();
+      if (cursors) {
+        this.input.keyboard?.on('keydown-LEFT', () => { player.setVelocityX(-160); });
+        this.input.keyboard?.on('keydown-RIGHT', () => { player.setVelocityX(160); });
+        this.input.keyboard?.on('keydown-UP', () => { if (player.body?.touching.down) player.setVelocityY(-330); });
+        this.input.keyboard?.on('keyup-LEFT', () => { player.setVelocityX(0); });
+        this.input.keyboard?.on('keyup-RIGHT', () => { player.setVelocityX(0); });
+      }
 
-    this.physics.add.overlap(this.player, this.items, this.collectItem, undefined, this);
+    } else if (this.minigameId === 'baker') {
+      this.add.image(400, 300, 'bakery_bg');
+      this.add.image(600, 450, 'oven').setScale(0.8);
+
+      const doughs = this.physics.add.group({
+        key: 'dough',
+        repeat: 5,
+        setXY: { x: 100, y: 100, stepX: 100, stepY: 50 }
+      });
+
+      doughs.children.iterate((child: Phaser.GameObjects.GameObject) => {
+        (child as Phaser.Physics.Arcade.Sprite).setInteractive();
+        this.input.setDraggable(child as Phaser.GameObjects.Sprite);
+        return true;
+      });
+
+      this.input.on('drag', (pointer: Phaser.Input.Pointer, gameObject: Phaser.GameObjects.Sprite, dragX: number, dragY: number) => {
+        gameObject.x = dragX;
+        gameObject.y = dragY;
+      });
+
+      // Simple oven drop zone
+      const ovenZone = this.add.zone(600, 450, 100, 100).setRectangleDropZone(100, 100);
+      const dropZoneGraphics = this.add.graphics();
+      dropZoneGraphics.lineStyle(2, 0xffff00);
+      dropZoneGraphics.strokeRect(ovenZone.x - ovenZone.input.hitArea.width / 2, ovenZone.y - ovenZone.input.hitArea.height / 2, ovenZone.input.hitArea.width, ovenZone.input.hitArea.height);
+
+      this.input.on('drop', (pointer: Phaser.Input.Pointer, gameObject: Phaser.GameObjects.Sprite, dropZone: Phaser.GameObjects.Zone) => {
+        if (dropZone === ovenZone) {
+          gameObject.destroy();
+          this.score += 50;
+          this.updateScoreText();
+        } else {
+          gameObject.x = gameObject.input?.dragStartX || gameObject.x;
+          gameObject.y = gameObject.input?.dragStartY || gameObject.y;
+        }
+      });
+    }
 
     // Score Text
-    this.scoreText = this.add.text(
-      this.isRTL ? this.cameras.main.width - 16 : 16,
-      16,
-      `${this.t('game_score' as TranslationKeys)}: 0`,
-      { fontSize: '32px', color: '#000' }
-    );
+    this.scoreText = this.add.text(16, 16, `${this.t('minigame_score' as TranslationKeys)}: 0`, {
+      fontSize: '32px',
+      color: '#000',
+      fontFamily: 'Arial',
+    });
     this.scoreText.setOrigin(this.isRTL ? 1 : 0, 0); // Adjust origin for RTL
+    this.scoreText.x = this.isRTL ? this.cameras.main.width - 16 : 16;
 
     // Timer Text
-    this.timerText = this.add.text(
-      this.isRTL ? 16 : this.cameras.main.width - 16,
-      16,
-      `${this.t('game_time_left' as TranslationKeys)}: ${this.timeLeft}`,
-      { fontSize: '32px', color: '#000' }
-    );
-    this.timerText.setOrigin(this.isRTL ? 0 : 1, 0); // Adjust origin for RTL
+    const timerText = this.add.text(this.cameras.main.width - 16, 16, `${this.t('minigame_time_left' as TranslationKeys)}: ${this.timeLeft}`, {
+      fontSize: '32px',
+      color: '#000',
+      fontFamily: 'Arial',
+    });
+    timerText.setOrigin(this.isRTL ? 0 : 1, 0); // Adjust origin for RTL
+    timerText.x = this.isRTL ? 16 : this.cameras.main.width - 16;
 
-    // Game Timer
     this.timerEvent = this.time.addEvent({
       delay: 1000,
-      callback: this.updateTimer,
+      callback: () => {
+        this.timeLeft--;
+        timerText.setText(`${this.t('minigame_time_left' as TranslationKeys)}: ${this.timeLeft}`);
+        if (this.timeLeft <= 0) {
+          this.timerEvent?.destroy();
+          this.endGame();
+        }
+      },
       callbackScope: this,
       loop: true,
     });
   }
 
   update() {
-    if (this.timeLeft <= 0) {
-      this.endGame();
-      return;
-    }
-
-    if (this.cursors.left.isDown) {
-      this.player.setVelocityX(-160);
-    } else if (this.cursors.right.isDown) {
-      this.player.setVelocityX(160);
-    } else {
-      this.player.setVelocityX(0);
-    }
-
-    if (this.cursors.up.isDown && this.player.body!.touching.down) {
-      this.player.setVelocityY(-330);
-    }
+    // Game logic for continuous updates
   }
 
-  private collectItem(player: Phaser.GameObjects.GameObject, item: Phaser.GameObjects.GameObject) {
-    (item as Phaser.Physics.Arcade.Image).disableBody(true, true);
+  private collectCarrot(player: Phaser.GameObjects.GameObject, carrot: Phaser.GameObjects.GameObject) {
+    (carrot as Phaser.Physics.Arcade.Sprite).disableBody(true, true);
     this.score += 10;
-    this.scoreText.setText(`${this.t('game_score' as TranslationKeys)}: ${this.score}`);
-
-    if (this.items.countActive(true) === 0) {
-      // All items collected, spawn more
-      this.items.children.iterate((child) => {
-        (child as Phaser.Physics.Arcade.Image).enableBody(true, child.x, 0, true, true);
-        return true;
-      });
-    }
+    this.updateScoreText();
   }
 
-  private updateTimer() {
-    this.timeLeft--;
-    this.timerText.setText(`${this.t('game_time_left' as TranslationKeys)}: ${this.timeLeft}`);
-    if (this.timeLeft <= 0) {
-      this.timerEvent.destroy();
-      this.endGame();
+  private updateScoreText() {
+    if (this.scoreText && this.t) {
+      this.scoreText.setText(`${this.t('minigame_score' as TranslationKeys)}: ${this.score}`);
     }
   }
 
   private endGame() {
-    this.physics.pause();
-    this.player.setTint(0xff0000); // Player turns red
-    this.onGameComplete(this.score);
-
-    // Display "Game Over" message
-    const gameOverText = this.add.text(
-      this.cameras.main.width / 2,
-      this.cameras.main.height / 2,
-      this.t('minigame_game_over' as TranslationKeys),
-      { fontSize: '64px', color: '#ff0000', fontWeight: 'bold' }
-    );
-    gameOverText.setOrigin(0.5);
+    console.log('Game Over! Final Score:', this.score);
+    this.onGameComplete?.(this.score);
+    this.scene.pause(); // Pause the scene instead of stopping immediately
   }
 }
-

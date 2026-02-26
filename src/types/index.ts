@@ -1,26 +1,30 @@
-// Define common types used across the application
+// src/types/index.ts
 
-export type Id = string; // Generic ID type
+import { TranslationKeys } from "@/i18n/translations";
 
-export interface UserProfile {
+export type Id = string;
+
+export interface User {
   id: Id;
+  email: string;
   nickname: string;
-  language: string; // e.g., "en", "ja"
-  // Add other common user profile fields here
-}
-
-export interface WorldLocation {
-  id: Id;
-  nameKey: string; // Key for i18n translation
-  descriptionKey: string; // Key for i18n translation
-  coordinates: { x: number; y: number }; // Percentage coordinates for map placement
-  jobsAvailable: Id[]; // List of job IDs available at this location
+  role: "child" | "parent" | "admin";
 }
 
 export interface ChatMessage {
   id: Id;
   senderId: Id;
   recipientId: Id;
-  phraseKey: string; // Key for i18n translation of predefined phrases
+  phraseKey: TranslationKeys; // Use TranslationKeys for predefined phrases
   timestamp: number; // Unix timestamp
 }
+
+export interface WorldLocation {
+  id: Id;
+  nameKey: TranslationKeys;
+  descriptionKey: TranslationKeys;
+  coordinates: { x: number; y: number }; // Percentage coordinates
+  jobsAvailable: Id[]; // Array of job IDs
+}
+
+// Add other global types here as needed

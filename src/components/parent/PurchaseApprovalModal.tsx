@@ -1,10 +1,10 @@
 import React from "react";
-import { View, Text, TouchableOpacity, Modal, StyleSheet, Platform, ActivityIndicator } from "react-native";
+import { Modal, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Platform } from "react-native";
 import { t } from "@/i18n";
 import { getIsRTL } from "@/i18n";
 import { TranslationKeys } from "@/i18n/translations";
 
-interface PurchaseItem {
+interface Purchase {
   id: string;
   childNickname: string;
   itemName: string;
@@ -17,7 +17,7 @@ interface PurchaseItem {
 interface PurchaseApprovalModalProps {
   isVisible: boolean;
   onClose: () => void;
-  purchase: PurchaseItem | null;
+  purchase: Purchase | null;
   onApprove: (purchaseId: string) => void;
   onReject: (purchaseId: string) => void;
   isLoading: boolean;
@@ -34,12 +34,12 @@ export function PurchaseApprovalModal({
   const isRTL = getIsRTL();
 
   if (!purchase) {
-    return null;
+    return null; // Don't render if no purchase is selected
   }
 
   const formatTimestamp = (isoString: string) => {
     const date = new Date(isoString);
-    return date.toLocaleDateString(t("locale_code" as TranslationKeys), {
+    return date.toLocaleString(t("locale_code" as TranslationKeys), {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
@@ -61,27 +61,49 @@ export function PurchaseApprovalModal({
             {t("purchase_approval_modal_title" as TranslationKeys)}
           </Text>
 
-          <View style={[styles.detailRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-            <Text style={styles.detailLabel}>{t("purchase_approval_modal_child_name" as TranslationKeys)}</Text>
-            <Text style={[styles.detailValue, { textAlign: isRTL ? 'left' : 'right' }]}>{purchase.childNickname}</Text>
+          <View style={styles.detailRow}>
+            <Text style={[styles.detailLabel, { textAlign: isRTL ? 'right' : 'left' }]}>
+              {t("purchase_approval_modal_child" as TranslationKeys)}
+            </Text>
+            <Text style={[styles.detailValue, { textAlign: isRTL ? 'right' : 'left' }]}>
+              {purchase.childNickname}
+            </Text>
           </View>
-          <View style={[styles.detailRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-            <Text style={styles.detailLabel}>{t("purchase_approval_modal_item_name" as TranslationKeys)}</Text>
-            <Text style={[styles.detailValue, { textAlign: isRTL ? 'left' : 'right' }]}>{purchase.itemName}</Text>
+
+          <View style={styles.detailRow}>
+            <Text style={[styles.detailLabel, { textAlign: isRTL ? 'right' : 'left' }]}>
+              {t("purchase_approval_modal_item" as TranslationKeys)}
+            </Text>
+            <Text style={[styles.detailValue, { textAlign: isRTL ? 'right' : 'left' }]}>
+              {purchase.itemName}
+            </Text>
           </View>
-          <View style={[styles.detailRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-            <Text style={styles.detailLabel}>{t("purchase_approval_modal_item_description" as TranslationKeys)}</Text>
-            <Text style={[styles.detailValue, { textAlign: isRTL ? 'left' : 'right' }]}>{purchase.itemDescription}</Text>
+
+          <View style={styles.detailRow}>
+            <Text style={[styles.detailLabel, { textAlign: isRTL ? 'right' : 'left' }]}>
+              {t("purchase_approval_modal_description" as TranslationKeys)}
+            </Text>
+            <Text style={[styles.detailValue, { textAlign: isRTL ? 'right' : 'left' }]}>
+              {purchase.itemDescription}
+            </Text>
           </View>
-          <View style={[styles.detailRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-            <Text style={styles.detailLabel}>{t("purchase_approval_modal_cost" as TranslationKeys)}</Text>
-            <Text style={[styles.detailValue, { textAlign: isRTL ? 'left' : 'right' }]}>
+
+          <View style={styles.detailRow}>
+            <Text style={[styles.detailLabel, { textAlign: isRTL ? 'right' : 'left' }]}>
+              {t("purchase_approval_modal_cost" as TranslationKeys)}
+            </Text>
+            <Text style={[styles.detailValue, { textAlign: isRTL ? 'right' : 'left' }]}>
               {purchase.cost} {purchase.currency === "points" ? t("points_unit" as TranslationKeys) : t("real_money_unit" as TranslationKeys)}
             </Text>
           </View>
-          <View style={[styles.detailRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-            <Text style={styles.detailLabel}>{t("purchase_approval_modal_timestamp" as TranslationKeys)}</Text>
-            <Text style={[styles.detailValue, { textAlign: isRTL ? 'left' : 'right' }]}>{formatTimestamp(purchase.timestamp)}</Text>
+
+          <View style={styles.detailRow}>
+            <Text style={[styles.detailLabel, { textAlign: isRTL ? 'right' : 'left' }]}>
+              {t("purchase_approval_modal_requested_at" as TranslationKeys)}
+            </Text>
+            <Text style={[styles.detailValue, { textAlign: isRTL ? 'right' : 'left' }]}>
+              {formatTimestamp(purchase.timestamp)}
+            </Text>
           </View>
 
           <View style={[styles.buttonContainer, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
@@ -90,23 +112,31 @@ export function PurchaseApprovalModal({
               onPress={() => onApprove(purchase.id)}
               disabled={isLoading}
             >
-              {isLoading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>{t("purchase_approval_modal_approve_button" as TranslationKeys)}</Text>}
+              {isLoading ? (
+                <ActivityIndicator color="#fff" />
+              ) : (
+                <Text style={styles.buttonText}>{t("purchase_approval_modal_approve_button" as TranslationKeys)}</Text>
+              )}
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.button, styles.rejectButton, isLoading && styles.buttonDisabled]}
               onPress={() => onReject(purchase.id)}
               disabled={isLoading}
             >
-              {isLoading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>{t("purchase_approval_modal_reject_button" as TranslationKeys)}</Text>}
+              {isLoading ? (
+                <ActivityIndicator color="#fff" />
+              ) : (
+                <Text style={styles.buttonText}>{t("purchase_approval_modal_reject_button" as TranslationKeys)}</Text>
+              )}
             </TouchableOpacity>
           </View>
 
           <TouchableOpacity
-            style={[styles.button, styles.closeButton, isLoading && styles.buttonDisabled]}
+            style={[styles.closeButton, { alignSelf: isRTL ? 'flex-end' : 'flex-start' }]}
             onPress={onClose}
             disabled={isLoading}
           >
-            {isLoading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>{t("purchase_approval_modal_close_button" as TranslationKeys)}</Text>}
+            <Text style={styles.closeButtonText}>{t("purchase_approval_modal_close_button" as TranslationKeys)}</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -134,14 +164,15 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    width: Platform.OS === 'web' ? '50%' : '90%', // Adjust width for web vs mobile
+    width: Platform.OS === 'web' ? '40%' : '90%', // Adjust width for web vs native
     maxWidth: 600,
   },
   modalTitle: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: "bold",
+    color: "#1e40af",
     marginBottom: 20,
-    color: '#1e40af', // text-blue-800
+    width: '100%',
   },
   detailRow: {
     flexDirection: 'row',
@@ -152,48 +183,53 @@ const styles = StyleSheet.create({
   detailLabel: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: '#374151', // text-gray-700
+    color: '#4b5563',
     flex: 1,
   },
   detailValue: {
     fontSize: 16,
-    color: '#4b5563', // text-gray-600
+    color: '#1f2937',
     flex: 2,
   },
   buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
     marginTop: 30,
     width: '100%',
+    justifyContent: 'space-around',
+    gap: 10, // Added gap for spacing between buttons
   },
   button: {
-    borderRadius: 5,
+    flex: 1,
+    borderRadius: 8,
     paddingVertical: 12,
-    paddingHorizontal: 20,
-    elevation: 2,
-    minWidth: 120,
-    marginHorizontal: 5,
-    justifyContent: 'center', // Center content for ActivityIndicator
-    alignItems: 'center', // Center content for ActivityIndicator
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   approveButton: {
-    backgroundColor: '#22c55e', // bg-green-500
+    backgroundColor: "#22c55e", // green-500
   },
   rejectButton: {
-    backgroundColor: '#ef4444', // bg-red-500
+    backgroundColor: "#ef4444", // red-500
   },
-  closeButton: {
-    backgroundColor: '#6b7280', // bg-gray-500
-    marginTop: 15,
-    alignSelf: 'center',
+  buttonDisabled: {
+    opacity: 0.7,
   },
   buttonText: {
     color: "white",
     fontWeight: "bold",
-    textAlign: "center",
     fontSize: 16,
   },
-  buttonDisabled: {
-    opacity: 0.7,
+  closeButton: {
+    marginTop: 20,
+    backgroundColor: "#6b7280", // gray-500
+    borderRadius: 8,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  closeButtonText: {
+    color: "white",
+    fontWeight: "bold",
+    fontSize: 16,
   },
 });

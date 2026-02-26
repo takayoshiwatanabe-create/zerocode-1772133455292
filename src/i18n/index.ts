@@ -1,78 +1,11 @@
 import i18n from "i18next";
-import { initReactI18next } from "react-i18next";
-import * as Localization from "expo-localization";
-import LanguageDetector from 'i18next-browser-languagedetector';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Platform, I18nManager } from "react-native";
+import { TranslationKeys } from "./translations"; // Import TranslationKeys
 
-// Import all translation files
-import en from "./locales/en.json";
-import ja from "./locales/ja.json";
-import zh from "./locales/zh.json";
-import ko from "./locales/ko.json";
-import es from "./locales/es.json";
-import fr from "./locales/fr.json";
-import de from "./locales/de.json";
-import pt from "./locales/pt.json";
-import ar from "./locales/ar.json"; // Arabic
-import hi from "./locales/hi.json"; // Hindi
-import { TranslationKeys } from "./translations";
+const LANGUAGE_STORAGE_KEY = "user_language";
 
-// Define resources
-const resources = {
-  en: { translation: en },
-  ja: { translation: ja },
-  zh: { translation: zh },
-  ko: { translation: ko },
-  es: { translation: es },
-  fr: { translation: fr },
-  de: { translation: de },
-  pt: { translation: pt },
-  ar: { translation: ar },
-  hi: { translation: hi },
-};
-
-// Supported languages and their RTL status
-const supportedLanguages = {
-  ja: { rtl: false },
-  en: { rtl: false },
-  zh: { rtl: false },
-  ko: { rtl: false },
-  es: { rtl: false },
-  fr: { rtl: false },
-  de: { rtl: false },
-  pt: { rtl: false },
-  ar: { rtl: true }, // Arabic is RTL
-  hi: { rtl: false },
-};
-
-// Get device language
-const getDeviceLanguage = (): string => {
-  const locale = Localization.getLocales()[0];
-  const languageCode = locale ? locale.split('-')[0] : 'en';
-  return Object.keys(supportedLanguages).includes(languageCode) ? languageCode : 'en';
-};
-
-const defaultLanguage = getDeviceLanguage(); // Use device language as default
-
-i18n
-  .use(LanguageDetector) // Detect user language
-  .use(initReactI18next) // passes i18n down to react-i18next
-  .init({
-    resources,
-    lng: defaultLanguage, // Set initial language
-    fallbackLng: "en", // fallback language if a translation is not found
-    interpolation: {
-      escapeValue: false, // react already safes from xss
-    },
-    detection: {
-      order: ['localStorage', 'navigator', 'htmlTag', 'path', 'subdomain'],
-      caches: ['localStorage'],
-    },
-    react: {
-      useSuspense: false, // Set to false for Expo Router compatibility
-    },
-  });
-
-export const t = (key: TranslationKeys, options?: Record<string, unknown>): string => {
+export const t = (key: TranslationKeys, options?: any): string => {
   return i18n.t(key, options);
 };
 
@@ -80,10 +13,27 @@ export const getLang = (): string => {
   return i18n.language;
 };
 
+export const changeLanguage = async (langCode: string) => {
+  await i18n.changeLanguage(langCode);
+  await AsyncStorage.setItem(LANGUAGE_STORAGE_KEY, langCode);
+
+  if (Platform.OS !== 'web') {
+    const isRTL = getIsRTL(langCode);
+    if (I18nManager.isRTL !== isRTL) {
+      // I18nManager.forceRTL(isRTL);
+      // I18nManager.allowRTL(isRTL);
+      // console.warn("Language direction changed. Please restart the app for full UI adaptation.");
+      // Forcing RTL on native requires a reload to fully apply.
+      // The _layout.tsx handles the initial setting.
+      // For dynamic changes, a full app reload is often needed.
+    }
+  }
+};
+
 export const getIsRTL = (lang?: string): boolean => {
   const currentLang = lang || i18n.language;
-  return supportedLanguages[currentLang as keyof typeof supportedLanguages]?.rtl || false;
+  // RULE-TECH-004: RTL language (Arabic) full layout reversal support
+  return currentLang === "ar"; // Arabic is the only RTL language in our supported list
 };
 
 export default i18n;
-

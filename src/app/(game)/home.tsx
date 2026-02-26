@@ -6,17 +6,20 @@ import { useAuth } from "@/hooks/useAuth";
 import { WorldMap } from "@/components/game/WorldMap";
 import { useRouter } from "expo-router";
 import { Id } from "@/types";
-import { JobCard } from "@/components/game/JobCard"; // Import JobCard
-import { TranslationKeys } from "@/i18n/translations"; // Import TranslationKeys
+import { JobCard } from "@/components/game/JobCard";
+import { TranslationKeys } from "@/i18n/translations";
+import { AdViewer } from "@/components/game/AdViewer"; // Import AdViewer
+import { useGameEconomy } from "@/hooks/useGameEconomy"; // Import useGameEconomy
+import { PointDisplay } from "@/components/game/PointDisplay"; // Import PointDisplay
 
 export default function GameHome() {
   const { user, logout } = useAuth();
   const isRTL = getIsRTL();
   const router = useRouter();
+  const { playerPoints, updatePlayerPoints } = useGameEconomy(); // Use game economy hook
 
   // Mock player progress for progressive disclosure
   const [playerLevel, setPlayerLevel] = useState(1);
-  const [playerPoints, setPlayerPoints] = useState(1500);
   const [currentLocation, setCurrentLocation] = useState<Id>("home_village");
 
   const handleLogout = async () => {
@@ -27,6 +30,10 @@ export default function GameHome() {
   const handleSelectJob = (jobId: string) => {
     console.log("Selected job:", jobId);
     // In a real app, this would trigger a job mini-game or quest
+  };
+
+  const handleAdWatched = (pointsEarned: number) => {
+    updatePlayerPoints(pointsEarned); // Update points via the hook
   };
 
   return (
@@ -43,7 +50,7 @@ export default function GameHome() {
 
         <View style={[styles.playerStats, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
           <Text style={styles.statText}>{t("game_player_level", { level: playerLevel })}</Text>
-          <Text style={styles.statText}>{t("game_player_points", { points: playerPoints })}</Text>
+          <PointDisplay points={playerPoints} /> {/* Use PointDisplay component */}
         </View>
 
         <Text style={[styles.sectionTitle, { textAlign: isRTL ? 'right' : 'left' }]}>
@@ -58,6 +65,12 @@ export default function GameHome() {
             setCurrentLocation(locationId); // For mock purposes
           }}
         />
+
+        {/* Ad Viewer Section */}
+        <Text style={[styles.sectionTitle, { textAlign: isRTL ? 'right' : 'left' }]}>
+          {t("ad_viewer_section_title" as TranslationKeys)}
+        </Text>
+        <AdViewer onAdWatched={handleAdWatched} />
 
         {/* Progressive Disclosure: Unlock new features based on playerLevel */}
         {playerLevel >= 2 && (
@@ -168,6 +181,7 @@ const styles = StyleSheet.create({
     color: '#0c4a6e',
     marginBottom: 16,
     width: '100%',
+    marginTop: 24, // Added margin top to separate sections
   },
   unlockedFeature: {
     width: '100%',

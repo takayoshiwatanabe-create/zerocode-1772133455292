@@ -3,8 +3,9 @@ import "./globals.css";
 import { I18nProvider } from "@/i18n/I18nProvider";
 import { getLang, getIsRTL } from "@/i18n";
 import type { Metadata } from "next";
-import { AuthProvider } from "@/hooks/useAuth"; // Import AuthProvider
-import React from "react"; // Import React
+import { AuthProvider } from "@/hooks/useAuth";
+import { GameEconomyProvider } from "@/hooks/useGameEconomy"; // Import GameEconomyProvider
+import React from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,8 +26,10 @@ export default function RootLayout({
     <html lang={lang} dir={isRTL ? "rtl" : "ltr"}>
       <body className={inter.className}>
         <I18nProvider>
-          <AuthProvider> {/* Wrap with AuthProvider */}
-            {children}
+          <AuthProvider>
+            <GameEconomyProvider> {/* Wrap with GameEconomyProvider */}
+              {children}
+            </GameEconomyProvider>
           </AuthProvider>
         </I18nProvider>
       </body>

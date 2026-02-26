@@ -5,7 +5,9 @@ import { I18nManager, Platform } from "react-native";
 import { getIsRTL, getLang } from "@/i18n";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
-import { AuthProvider } from "@/hooks/useAuth"; // Import AuthProvider
+import { AuthProvider } from "@/hooks/useAuth";
+import { GameEconomyProvider } from "@/hooks/useGameEconomy"; // Import GameEconomyProvider
+import React from "react";
 
 export default function RootLayout() {
   const lang = getLang();
@@ -27,17 +29,19 @@ export default function RootLayout() {
 
   return (
     <I18nProvider>
-      <AuthProvider> {/* Wrap with AuthProvider */}
-        <SafeAreaProvider>
-          <Stack>
-            <Stack.Screen name="index" options={{ headerShown: false }} />
-            <Stack.Screen name="page" options={{ headerShown: false }} /> {/* Add page.tsx for web root */}
-            <Stack.Screen name="(parent)" options={{ headerShown: false }} />
-            <Stack.Screen name="(game)" options={{ headerShown: false }} />
-            {/* Add other screens here */}
-          </Stack>
-          <StatusBar style="auto" />
-        </SafeAreaProvider>
+      <AuthProvider>
+        <GameEconomyProvider> {/* Wrap with GameEconomyProvider */}
+          <SafeAreaProvider>
+            <Stack>
+              <Stack.Screen name="index" options={{ headerShown: false }} />
+              <Stack.Screen name="page" options={{ headerShown: false }} />
+              <Stack.Screen name="(parent)" options={{ headerShown: false }} />
+              <Stack.Screen name="(game)" options={{ headerShown: false }} />
+              {/* Add other screens here */}
+            </Stack>
+            <StatusBar style="auto" />
+          </SafeAreaProvider>
+        </GameEconomyProvider>
       </AuthProvider>
     </I18nProvider>
   );

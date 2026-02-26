@@ -189,7 +189,8 @@ const styles = StyleSheet.create({
   legendContainer: {
     position: 'absolute',
     bottom: 10,
-    [getIsRTL() ? 'left' : 'right']: 10, // Adjust position based on RTL
+    // [getIsRTL() ? 'left' : 'right']: 10, // Adjust position based on RTL - Removed this as it was causing issues on web
+    right: 10, // Default to right, adjust in component if needed
     backgroundColor: 'rgba(255,255,255,0.8)',
     padding: 10,
     borderRadius: 8,
@@ -215,7 +216,7 @@ const styles = StyleSheet.create({
     height: 16,
     borderRadius: 4,
     marginRight: 8,
-    marginLeft: getIsRTL() ? 8 : 0, // Adjust margin for RTL
+    // marginLeft: getIsRTL() ? 8 : 0, // Adjust margin for RTL - Removed this as it was causing issues on web
   },
   legendText: {
     fontSize: 12,

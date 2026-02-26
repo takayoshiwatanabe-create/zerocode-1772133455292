@@ -102,10 +102,10 @@ const initialState: AuthState = {
   isLoading: false,
   error: null,
   mfaRequired: false,
-  login: async () => {}, // Placeholder
-  signup: async () => {}, // Placeholder
-  verifyMfa: async () => {}, // Placeholder
-  logout: async () => {}, // Placeholder
+  login: async () => { /* no-op */ }, // Placeholder
+  signup: async () => { /* no-op */ }, // Placeholder
+  verifyMfa: async () => { /* no-op */ }, // Placeholder
+  logout: async () => { /* no-op */ }, // Placeholder
 };
 
 const AuthContext = createContext<AuthState>(initialState);

@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { UserProfile } from "@/types";
 import { t } from "@/i18n";
 import { Platform } from "react-native";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // Extend UserProfile to include MFA status
 interface AuthUserProfile extends UserProfile {
@@ -110,10 +111,10 @@ export function useAuth() {
         if (Platform.OS === 'web' && typeof window !== 'undefined' && window.localStorage) {
           storedToken = localStorage.getItem("authToken");
           storedUser = localStorage.getItem("authUser");
+        } else if (Platform.OS !== 'web') { // For React Native
+          storedToken = await AsyncStorage.getItem("authToken");
+          storedUser = await AsyncStorage.getItem("authUser");
         }
-        // For React Native, AsyncStorage would be used here.
-        // As per spec: "Persistent storage (e.g., AsyncStorage) is not implemented in this mock for RN, but noted as a future consideration."
-        // So, for RN, storedToken and storedUser will remain null in this mock.
 
         if (storedToken && storedUser) {
           const user = JSON.parse(storedUser) as AuthUserProfile;
@@ -129,6 +130,9 @@ export function useAuth() {
         if (Platform.OS === 'web' && typeof window !== 'undefined' && window.localStorage) {
           localStorage.removeItem("authToken");
           localStorage.removeItem("authUser");
+        } else if (Platform.OS !== 'web') {
+          await AsyncStorage.removeItem("authToken");
+          await AsyncStorage.removeItem("authUser");
         }
       }
     };
@@ -151,6 +155,9 @@ export function useAuth() {
         if (Platform.OS === 'web' && typeof window !== 'undefined' && window.localStorage) {
           localStorage.setItem("authToken", token);
           localStorage.setItem("authUser", JSON.stringify(user));
+        } else if (Platform.OS !== 'web') {
+          await AsyncStorage.setItem("authToken", token);
+          await AsyncStorage.setItem("authUser", JSON.stringify(user));
         }
         setState((prevState) => ({
           ...prevState,
@@ -198,6 +205,9 @@ export function useAuth() {
       if (Platform.OS === 'web' && typeof window !== 'undefined' && window.localStorage) {
         localStorage.setItem("authToken", token);
         localStorage.setItem("authUser", JSON.stringify(user));
+      } else if (Platform.OS !== 'web') {
+        await AsyncStorage.setItem("authToken", token);
+        await AsyncStorage.setItem("authUser", JSON.stringify(user));
       }
       setState((prevState) => ({
         ...prevState,
@@ -224,6 +234,9 @@ export function useAuth() {
       if (Platform.OS === 'web' && typeof window !== 'undefined' && window.localStorage) {
         localStorage.removeItem("authToken");
         localStorage.removeItem("authUser");
+      } else if (Platform.OS !== 'web') {
+        await AsyncStorage.removeItem("authToken");
+        await AsyncStorage.removeItem("authUser");
       }
       setState(initialState);
     } catch (err: any) {

@@ -5,21 +5,27 @@ import { t, getIsRTL } from "@/i18n";
 import { useAuth } from "@/hooks/useAuth";
 import { WorldMap } from "@/components/game/WorldMap";
 import { useRouter } from "expo-router";
-import { Id } from "@/types"; // Import Id type
+import { Id } from "@/types";
+import { JobCard } from "@/components/game/JobCard"; // Import JobCard
 
 export default function GameHome() {
   const { user, logout } = useAuth();
-  const isRTL = getIsR18(); // Changed from getIsRTL() to getIsR18()
+  const isRTL = getIsRTL();
   const router = useRouter();
 
   // Mock player progress for progressive disclosure
   const [playerLevel, setPlayerLevel] = useState(1);
   const [playerPoints, setPlayerPoints] = useState(1500);
-  const [currentLocation, setCurrentLocation] = useState<Id>("home_village"); // Specify Id type
+  const [currentLocation, setCurrentLocation] = useState<Id>("home_village");
 
   const handleLogout = async () => {
     await logout();
     router.replace(Platform.OS === 'web' ? "/page" : "/");
+  };
+
+  const handleSelectJob = (jobId: string) => {
+    console.log("Selected job:", jobId);
+    // In a real app, this would trigger a job mini-game or quest
   };
 
   return (
@@ -61,7 +67,27 @@ export default function GameHome() {
             <Text style={[styles.unlockedFeatureText, { textAlign: isRTL ? 'right' : 'left' }]}>
               {t("game_unlocked_jobs_description")}
             </Text>
-            <TouchableOpacity style={styles.featureButton}>
+            {/* Display JobCards for available jobs */}
+            <View style={styles.jobCardsContainer}>
+              <JobCard
+                jobId="farmer"
+                nameKey="job_farmer_title"
+                descriptionKey="job_farmer_description"
+                requiredLevel={1}
+                playerLevel={playerLevel}
+                onSelectJob={handleSelectJob}
+              />
+              <JobCard
+                jobId="baker"
+                nameKey="job_baker_title"
+                descriptionKey="job_baker_description"
+                requiredLevel={2}
+                playerLevel={playerLevel}
+                onSelectJob={handleSelectJob}
+              />
+              {/* Add more job cards as needed, with their respective required levels */}
+            </View>
+            <TouchableOpacity style={[styles.featureButton, { alignSelf: isRTL ? 'flex-end' : 'flex-start' }]}>
               <Text style={styles.featureButtonText}>{t("game_view_jobs_button")}</Text>
             </TouchableOpacity>
           </View>
@@ -75,7 +101,7 @@ export default function GameHome() {
             <Text style={[styles.unlockedFeatureText, { textAlign: isRTL ? 'right' : 'left' }]}>
               {t("game_unlocked_economy_description")}
             </Text>
-            <TouchableOpacity style={styles.featureButton}>
+            <TouchableOpacity style={[styles.featureButton, { alignSelf: isRTL ? 'flex-end' : 'flex-start' }]}>
               <Text style={styles.featureButtonText}>{t("game_view_economy_button")}</Text>
             </TouchableOpacity>
           </View>
@@ -170,11 +196,16 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 15,
     borderRadius: 6,
-    alignSelf: 'flex-start', // Align button to start
+    // alignSelf: 'flex-start', // Align button to start - This needs to be dynamic for RTL
+    marginTop: 16, // Added margin top for separation from job cards
   },
   featureButtonText: {
     color: '#fff',
     fontWeight: 'bold',
     fontSize: 16,
   },
+  jobCardsContainer: {
+    marginTop: 16,
+  },
 });
+

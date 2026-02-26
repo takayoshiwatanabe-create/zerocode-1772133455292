@@ -71,7 +71,13 @@
   "game_view_jobs_button": "عرض الوظائف",
   "game_unlocked_economy_title": "تم فتح نظام الاقتصاد!",
   "game_unlocked_economy_description": "شارك في اقتصاد اللعبة وادارة نقاطك وأسهمك.",
-  "game_view_economy_button": "عرض الاقتصاد"
+  "game_view_economy_button": "عرض الاقتصاد",
+  "job_card_required_level": "المستوى المطلوب: {{level}}",
+  "job_card_locked": "مغلق",
+  "job_card_start_button": "ابدأ الوظيفة",
+  "job_card_unlock_more": "افتح المزيد من الوظائف",
+  "job_farmer_title": "مزارع",
+  "job_farmer_description": "ازرع المحاصيل واعتني بالحيوانات.",
+  "job_baker_title": "خباز",
+  "job_baker_description": "اخبز الخبز اللذيذ والحلويات."
 }
-
-

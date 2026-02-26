@@ -71,7 +71,13 @@
   "game_view_jobs_button": "Berufe ansehen",
   "game_unlocked_economy_title": "Wirtschaftssystem freigeschaltet!",
   "game_unlocked_economy_description": "Nimm an der Spielwirtschaft teil und verwalte deine Punkte und Aktien.",
-  "game_view_economy_button": "Wirtschaft ansehen"
+  "game_view_economy_button": "Wirtschaft ansehen",
+  "job_card_required_level": "Benötigtes Level: {{level}}",
+  "job_card_locked": "Gesperrt",
+  "job_card_start_button": "Job starten",
+  "job_card_unlock_more": "Weitere Jobs freischalten",
+  "job_farmer_title": "Bauer",
+  "job_farmer_description": "Pflanze Getreide an und kümmere dich um Tiere.",
+  "job_baker_title": "Bäcker",
+  "job_baker_description": "Backe köstliches Brot und Gebäck."
 }
-
-

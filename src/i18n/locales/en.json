@@ -71,6 +71,10 @@
   "game_view_jobs_button": "View Jobs",
   "game_unlocked_economy_title": "Economy System Unlocked!",
   "game_unlocked_economy_description": "Participate in the in-game economy and manage your points and stocks.",
-  "game_view_economy_button": "View Economy"
+  "game_view_economy_button": "View Economy",
+  "job_card_required_level": "Required Level: {{level}}",
+  "job_card_locked": "Locked",
+  "job_card_start_button": "Start Job",
+  "job_card_unlock_more": "Unlock More"
 }
 

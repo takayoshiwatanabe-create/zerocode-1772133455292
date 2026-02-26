@@ -1,12 +1,12 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet, Image, Platform } from "react-native";
 import { t, getIsRTL } from "@/i18n";
-import { WorldLocation, Id } from "@/types"; // Import Id type
-import { TranslationKeys } from "@/i18n/translations"; // Import TranslationKeys
+import { WorldLocation, Id } from "@/types";
+import { TranslationKeys } from "@/i18n/translations";
 
 interface WorldMapProps {
   playerLevel: number;
-  currentLocation: Id; // ID of the player's current location
+  currentLocation: Id;
   onLocationSelect: (locationId: Id) => void;
 }
 
@@ -74,10 +74,10 @@ export function WorldMap({ playerLevel, currentLocation, onLocationSelect }: Wor
             ]}
             onPress={() => isAccessible && onLocationSelect(location.id)}
             disabled={!isAccessible}
-            accessibilityLabel={t("game_map_location_pin", { locationName: t(location.nameKey as TranslationKeys) })} // Cast to TranslationKeys
+            accessibilityLabel={t("game_map_location_pin", { locationName: t(location.nameKey as TranslationKeys) })}
           >
             <Text style={styles.locationPinText}>
-              {t(location.nameKey as TranslationKeys)} {/* Cast to TranslationKeys */}
+              {t(location.nameKey as TranslationKeys)}
             </Text>
             {!isAccessible && (
               <View style={styles.lockIcon}>
@@ -223,39 +223,3 @@ const styles = StyleSheet.create({
   },
 });
 
-// Add new translations for game screens
-declare module 'i18next' {
-  interface CustomTypeOptions {
-    resources: {
-      translation: {
-        game_home_title: string;
-        game_welcome_message: string;
-        player: string;
-        logout_button: string;
-        game_player_level: string;
-        game_player_points: string;
-        game_world_map_title: string;
-        game_world_map_alt_text: string;
-        game_map_location_pin: string;
-        game_map_legend_title: string;
-        game_map_legend_current_location: string;
-        game_map_legend_unlocked_location: string;
-        game_map_legend_locked_location: string;
-        location_home_village: string;
-        location_home_village_desc: string;
-        location_forest_outpost: string;
-        location_forest_outpost_desc: string;
-        location_mountain_peak: string;
-        location_mountain_peak_desc: string;
-        location_desert_oasis: string;
-        location_desert_oasis_desc: string;
-        game_unlocked_jobs_title: string;
-        game_unlocked_jobs_description: string;
-        game_view_jobs_button: string;
-        game_unlocked_economy_title: string;
-        game_unlocked_economy_description: string;
-        game_view_economy_button: string;
-      };
-    };
-  }
-}

@@ -1,8 +1,8 @@
 import * as Localization from "expo-localization";
 import { translations, type Language } from "./translations";
-import i18n from "i18next"; // Import i18n instance
-import LanguageDetector from "i18next-browser-languagedetector"; // Import for web detection
-import { Platform } from "react-native"; // Import Platform for conditional logic
+import i18n from "i18next";
+import LanguageDetector from "i18next-browser-languagedetector";
+import { Platform } from "react-native";
 
 const SUPPORTED_LANGUAGES: Language[] = ["ja", "en", "zh", "ko", "es", "fr", "de", "pt", "ar", "hi"];
 
@@ -40,8 +40,6 @@ export function getLang(): Language {
   }
 }
 
-// getIsRTL should not take a language argument if it's meant to use the current i18n language
-// It should rely on i18n.language for consistency with the rest of the i18n setup.
 export function getIsRTL(language?: Language): boolean {
   const currentLanguage = language || i18n.language.split('-')[0];
   return ["ar"].includes(currentLanguage);

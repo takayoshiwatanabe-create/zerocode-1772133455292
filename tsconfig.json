@@ -14,7 +14,7 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "react-native",
+    "jsx": "react-jsx",
     "incremental": true,
     "plugins": [
       {
@@ -32,7 +32,18 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "expo-env.d.ts"
+    "expo-env.d.ts",
+    "i18n/**/*.ts",
+    "i18n/**/*.tsx",
+    "tailwind.config.ts",
+    "app/**/*.ts",
+    "app/**/*.tsx",
+    "components/**/*.ts",
+    "components/**/*.tsx",
+    "hooks/**/*.ts",
+    "hooks/**/*.tsx",
+    "types/**/*.ts",
+    "types/**/*.tsx"
   ],
   "exclude": [
     "node_modules"

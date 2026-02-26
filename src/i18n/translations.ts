@@ -77,7 +77,7 @@ export const translations: Record<Language, Record<string, string>> = {
     auth_success_welcome: "欢迎，{{nickname}}！"
   },
   ko: {
-    app_name: "미스터리 어드벤처 ~세계를 여행하는 직업 도감~",
+    app_name: "미스터리 어드벤처 ~세계를 여행하는 직업 도감~~",
     welcome_message: "환영합니다! 세계를 여행하는 직업 도감에!",
     login_title: "학부모 로그인",
     signup_title: "학부모 회원가입",
@@ -250,5 +250,5 @@ export const translations: Record<Language, Record<string, string>> = {
     signup_success: "साइन अप सफल! कृपया लॉगिन करें।",
     mfa_success: "MFA सत्यापन सफल!",
     auth_success_welcome: "स्वागत है, {{nickname}}!"
-  },
+  }
 };

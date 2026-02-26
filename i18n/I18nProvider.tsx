@@ -1,10 +1,10 @@
 import React, { ReactNode, useEffect } from "react";
-import { I18nManager, Platform } from "react-native"; // Import Platform
+import { I18nManager, Platform } from "react-native";
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import { translations } from "./translations";
-import { getLang, getIsRTL } from "./index"; // Import functions
-import LanguageDetector from "i18next-browser-languagedetector"; // Import for web detection
+import { getLang, getIsRTL } from "./index";
+import LanguageDetector from "i18next-browser-languagedetector";
 
 interface I18nProviderProps {
   children: ReactNode;
@@ -12,7 +12,7 @@ interface I18nProviderProps {
 
 // Initialize i18next for React Native
 i18n
-  .use(LanguageDetector) // Add LanguageDetector for consistency, though its detection methods might differ on native
+  .use(LanguageDetector)
   .use(initReactI18next)
   .init({
     resources: Object.entries(translations).reduce((acc, [key, value]) => {
@@ -20,13 +20,13 @@ i18n
       return acc;
     }, {} as Record<string, { translation: Record<string, string> }>),
     fallbackLng: "ja",
-    lng: getLang(), // Use the detected language
+    lng: getLang(),
     debug: false,
     interpolation: {
       escapeValue: false, // react already safes from xss
     },
     detection: {
-      order: ['navigator', 'htmlTag', 'path', 'subdomain'], // Order for web
+      order: ['navigator', 'htmlTag', 'path', 'subdomain'],
       caches: ['localStorage'],
     },
   });

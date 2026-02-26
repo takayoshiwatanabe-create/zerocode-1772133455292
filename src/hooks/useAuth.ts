@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import { UserProfile } from "@/types"; // Language is not directly used in this file, so no need to import it here.
+import { UserProfile } from "@/types";
 import { t } from "@/i18n";
 
 // Extend UserProfile to include MFA status
@@ -98,7 +98,6 @@ export function useAuth() {
   // Load auth state from localStorage on initial render
   useEffect(() => {
     try {
-      // In React Native, localStorage is not directly available.
       // The design spec explicitly states: "No `localStorage` for React Native: Persistent storage (e.g., `AsyncStorage`) is not implemented in this mock for RN, but noted as a future consideration."
       // For web, localStorage would be appropriate. Given the dual platform nature, a platform-specific storage solution would be needed.
       // For now, keeping it commented out as per the spec's intent for this mock.

@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState, FormEvent, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { t } from "@/i18n";
-import { getIsRTL } from "@/i18n"; // getLang is not directly used here, getIsRTL is sufficient
-import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, Platform } from "react-native";
+import { getIsRTL } from "@/i18n";
+import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, Platform, TextStyle } from "react-native";
 
 type AuthMode = "signup" | "login" | "mfa";
 
@@ -17,8 +17,7 @@ export function AuthForm() {
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const { login, signup, verifyMfa, isLoading, isAuthenticated, user, mfaRequired } = useAuth();
 
-  // getLang is not needed directly here, getIsRTL is sufficient as it takes the language from i18n context
-  const isRTL = getIsRTL(); // Call getIsRTL without argument to use i18n.language
+  const isRTL = getIsRTL();
 
   useEffect(() => {
     if (isAuthenticated && user) {
@@ -44,7 +43,7 @@ export function AuthForm() {
       if (mode === "login") {
         await login(email, password);
         // If login is successful and MFA is not required, set success message
-        if (!mfaRequired) { // Check mfaRequired AFTER login attempt
+        if (!mfaRequired) {
           setSuccessMessage(t("login_success"));
         }
       } else if (mode === "signup") {
@@ -83,8 +82,6 @@ export function AuthForm() {
       shadowRadius: 10,
       elevation: 5, // For Android shadow
       backgroundColor: '#fff',
-      // For RTL layout, `I18nManager` handles the overall direction.
-      // Text alignment for children components is handled individually.
     }}>
       <Text style={{
         fontSize: 28, // text-3xl
@@ -136,7 +133,7 @@ export function AuthForm() {
                 fontWeight: 'bold',
                 marginBottom: 8, // mb-2
                 textAlign: isRTL ? 'right' : 'left',
-              }}>
+              } as TextStyle}>
                 {t("email_label")}
               </Text>
               <TextInput
@@ -172,7 +169,7 @@ export function AuthForm() {
                 fontWeight: 'bold',
                 marginBottom: 8, // mb-2
                 textAlign: isRTL ? 'right' : 'left',
-              }}>
+              } as TextStyle}>
                 {t("password_label")}
               </Text>
               <TextInput
@@ -211,7 +208,7 @@ export function AuthForm() {
               fontWeight: 'bold',
               marginBottom: 8, // mb-2
               textAlign: isRTL ? 'right' : 'left',
-            }}>
+            } as TextStyle}>
               {t("mfa_code_label")}
             </Text>
             <TextInput

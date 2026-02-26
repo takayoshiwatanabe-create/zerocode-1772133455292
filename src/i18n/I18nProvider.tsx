@@ -5,8 +5,8 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import { translations } from "./translations";
-import { getLang, getIsRTL } from "./index"; // Import functions for client-side
-import { I18nManager, Platform } from "react-native"; // Import I18nManager and Platform for React Native
+import { getLang, getIsRTL } from "./index";
+import { I18nManager, Platform } from "react-native";
 
 interface I18nProviderProps {
   children: ReactNode;

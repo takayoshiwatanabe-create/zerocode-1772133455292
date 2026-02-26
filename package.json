@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "expo start --web",
-    "build": "expo export:web",
-    "start": "expo start",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
     "lint": "eslint .",
     "test": "vitest",
     "test:e2e": "playwright test",
@@ -41,6 +41,11 @@
     "autoprefixer": "^10.4.19",
     "@types/i18next": "^13.0.0",
     "@types/i18next-browser-languagedetector": "^3.0.0",
-    "@types/expo-localization": "^15.0.0"
+    "@types/expo-localization": "^15.0.0",
+    "@types/tailwindcss": "^4.0.0-alpha.14"
+  },
+  "resolutions": {
+    "react": "18.2.0",
+    "react-dom": "18.2.0"
   }
 }

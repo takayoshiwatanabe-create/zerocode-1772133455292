@@ -1,19 +1,22 @@
 import { Stack } from "expo-router";
 import { I18nProvider } from "@/i18n/I18nProvider";
-import { getLang, getIsRTL } from "@/i18n";
 import { useEffect } from "react";
 import { I18nManager } from "react-native";
+import { getIsRTL, getLang } from "@/i18n"; // Import getLang and getIsRTL
 
 export default function RootLayout() {
   const lang = getLang();
   const isRTL = getIsRTL(lang);
 
   useEffect(() => {
-    // Set RTL for the entire app based on detected language
-    // This logic is already handled within I18nProvider's useEffect for React Native.
-    // Duplicating it here is redundant and can cause issues.
-    // The I18nProvider should be the single source of truth for I18nManager configuration.
-    // Removing this block.
+    // This effect ensures I18nManager is correctly set for React Native
+    // based on the detected language's RTL status.
+    if (I18nManager.isRTL !== isRTL) {
+      I18nManager.forceRTL(isRTL);
+      I18nManager.allowRTL(isRTL);
+      // A full app reload might be necessary for some components to fully adapt.
+      // In a real application, this might involve a user prompt or more complex state management.
+    }
   }, [isRTL]);
 
   return (

@@ -40,7 +40,7 @@ export default function GameHome() {
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={[styles.scrollViewContent, { alignItems: isRTL ? 'flex-end' : 'flex-start' }]}>
         <View style={[styles.header, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-          <Text style={styles.welcomeText}>
+          <Text style={[styles.welcomeText, { textAlign: isRTL ? 'right' : 'left' }]}>
             {t("game_welcome_message", { nickname: user?.nickname || t("player") })}
           </Text>
           <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
@@ -49,7 +49,7 @@ export default function GameHome() {
         </View>
 
         <View style={[styles.playerStats, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-          <Text style={styles.statText}>{t("game_player_level", { level: playerLevel })}</Text>
+          <Text style={[styles.statText, { textAlign: isRTL ? 'right' : 'left' }]}>{t("game_player_level", { level: playerLevel })}</Text>
           <PointDisplay points={playerPoints} /> {/* Use PointDisplay component */}
         </View>
 
@@ -223,4 +223,3 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
 });
-

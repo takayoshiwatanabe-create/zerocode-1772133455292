@@ -56,10 +56,10 @@ export function AdViewer({ onAdWatched }: AdViewerProps) {
       )}
 
       <View style={[styles.adInfoRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-        <Text style={styles.adInfoText}>
+        <Text style={[styles.adInfoText, { textAlign: isRTL ? 'right' : 'left' }]}>
           {t("ad_viewer_ads_watched_today" as TranslationKeys, { count: adsWatchedToday, max: 10 })}
         </Text>
-        <Text style={styles.adInfoText}>
+        <Text style={[styles.adInfoText, { textAlign: isRTL ? 'right' : 'left' }]}>
           {t("ad_viewer_ads_remaining" as TranslationKeys, { count: remainingAds })}
         </Text>
       </View>
@@ -191,4 +191,3 @@ const styles = StyleSheet.create({
     width: '100%',
   },
 });
-

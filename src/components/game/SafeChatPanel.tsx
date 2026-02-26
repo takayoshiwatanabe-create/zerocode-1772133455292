@@ -50,14 +50,15 @@ export function SafeChatPanel({
                   styles.messageBubble,
                   isMyMessage ? styles.myMessage : styles.otherMessage,
                   {
+                    // Align messages based on sender and RTL status
                     alignSelf: isMyMessage ? (isRTL ? 'flex-start' : 'flex-end') : (isRTL ? 'flex-end' : 'flex-start'),
                   },
                 ]}
               >
-                <Text style={isMyMessage ? styles.myMessageText : styles.otherMessageText}>
+                <Text style={[isMyMessage ? styles.myMessageText : styles.otherMessageText, { textAlign: isRTL ? 'right' : 'left' }]}>
                   {t(msg.phraseKey as TranslationKeys)}
                 </Text>
-                <Text style={[styles.timestampText, { textAlign: isMyMessage ? 'right' : 'left' }]}>
+                <Text style={[styles.timestampText, { textAlign: isRTL ? 'left' : 'right' }]}>
                   {new Date(msg.timestamp).toLocaleTimeString(t("locale_code" as TranslationKeys), { hour: '2-digit', minute: '2-digit' })}
                 </Text>
               </View>

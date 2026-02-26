@@ -5,7 +5,7 @@ import { t, getIsRTL } from "@/i18n";
 import { useAuth } from "@/hooks/useAuth";
 import { SafeChatPanel } from "@/components/game/SafeChatPanel";
 import { Id, ChatMessage } from "@/types";
-import { TranslationKeys } from "@/i18n/translations"; // Import TranslationKeys
+import { TranslationKeys } from "@/i18n/translations";
 
 export default function GameChatScreen() {
   const { user, isLoading: authLoading } = useAuth();
@@ -222,4 +222,3 @@ const styles = StyleSheet.create({
     width: '100%',
   },
 });
-

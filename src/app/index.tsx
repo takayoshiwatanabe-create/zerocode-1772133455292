@@ -21,7 +21,9 @@ export default function HomePage() {
           paddingLeft: insets.left,
           paddingRight: insets.right,
           // Apply text direction for the whole container on native
-          direction: isRTL ? "rtl" : "ltr",
+          // This is handled by I18nManager.forceRTL in _layout.tsx,
+          // so setting 'direction' style here is redundant and can cause issues.
+          // direction: isRTL ? "rtl" : "ltr",
         },
       ]}
     >

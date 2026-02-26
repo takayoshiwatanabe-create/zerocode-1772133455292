@@ -12,8 +12,8 @@ export function PointDisplay({ points }: PointDisplayProps) {
 
   return (
     <View style={[styles.container, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-      <Text style={styles.label}>{t("game_player_points_label" as TranslationKeys)}</Text>
-      <Text style={styles.value}>{points}</Text>
+      <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>{t("game_player_points_label" as TranslationKeys)}</Text>
+      <Text style={[styles.value, { textAlign: isRTL ? 'right' : 'left' }]}>{points}</Text>
     </View>
   );
 }
@@ -44,4 +44,3 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
-

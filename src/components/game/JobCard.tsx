@@ -32,11 +32,11 @@ export function JobCard({
         {t(descriptionKey)}
       </Text>
       <View style={[styles.infoRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-        <Text style={styles.requiredLevel}>
+        <Text style={[styles.requiredLevel, { textAlign: isRTL ? 'right' : 'left' }]}>
           {t("job_card_required_level" as TranslationKeys, { level: requiredLevel })}
         </Text>
         {!isUnlocked && (
-          <Text style={styles.lockedText}>
+          <Text style={[styles.lockedText, { textAlign: isRTL ? 'right' : 'left' }]}>
             {t("job_card_locked" as TranslationKeys)}
           </Text>
         )}
@@ -112,4 +112,3 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-

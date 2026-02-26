@@ -94,18 +94,18 @@ export function WorldMap({ playerLevel, currentLocation, onLocationSelect }: Wor
       })}
 
       <View style={[styles.legendContainer, { alignItems: isRTL ? 'flex-end' : 'flex-start', [isRTL ? 'left' : 'right']: 10 }]}>
-        <Text style={styles.legendTitle}>{t("game_map_legend_title" as TranslationKeys)}</Text>
+        <Text style={[styles.legendTitle, { textAlign: isRTL ? 'right' : 'left' }]}>{t("game_map_legend_title" as TranslationKeys)}</Text>
         <View style={[styles.legendItem, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
           <View style={[styles.legendColorBox, { marginLeft: isRTL ? 8 : 0, marginRight: isRTL ? 0 : 8, backgroundColor: '#fcd34d' }]} />
-          <Text style={styles.legendText}>{t("game_map_legend_current_location" as TranslationKeys)}</Text>
+          <Text style={[styles.legendText, { textAlign: isRTL ? 'right' : 'left' }]}>{t("game_map_legend_current_location" as TranslationKeys)}</Text>
         </View>
         <View style={[styles.legendItem, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
           <View style={[styles.legendColorBox, { marginLeft: isRTL ? 8 : 0, marginRight: isRTL ? 0 : 8, backgroundColor: '#3b82f6' }]} />
-          <Text style={styles.legendText}>{t("game_map_legend_unlocked_location" as TranslationKeys)}</Text>
+          <Text style={[styles.legendText, { textAlign: isRTL ? 'right' : 'left' }]}>{t("game_map_legend_unlocked_location" as TranslationKeys)}</Text>
         </View>
         <View style={[styles.legendItem, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
           <View style={[styles.legendColorBox, { marginLeft: isRTL ? 8 : 0, marginRight: isRTL ? 0 : 8, backgroundColor: '#9ca3af' }]} />
-          <Text style={styles.legendText}>{t("game_map_legend_locked_location" as TranslationKeys)}</Text>
+          <Text style={[styles.legendText, { textAlign: isRTL ? 'right' : 'left' }]}>{t("game_map_legend_locked_location" as TranslationKeys)}</Text>
         </View>
       </View>
     </View>
@@ -221,4 +221,3 @@ const styles = StyleSheet.create({
     color: '#374151',
   },
 });
-

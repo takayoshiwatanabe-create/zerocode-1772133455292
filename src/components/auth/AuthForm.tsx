@@ -79,7 +79,7 @@ export function AuthForm() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>
+      <Text style={[styles.title, { textAlign: isRTL ? 'right' : 'left' }]}>
         {mode === "login" && t("login_title" as TranslationKeys)}
         {mode === "signup" && t("signup_title" as TranslationKeys)}
         {mode === "mfa" && t("mfa_title" as TranslationKeys)}
@@ -87,13 +87,13 @@ export function AuthForm() {
 
       {error && (
         <View style={styles.errorBox}>
-          <Text style={styles.errorText}>{error}</Text>
+          <Text style={[styles.errorText, { textAlign: isRTL ? 'right' : 'left' }]}>{error}</Text>
         </View>
       )}
 
       {successMessage && (
         <View style={styles.successBox}>
-          <Text style={styles.successText}>{successMessage}</Text>
+          <Text style={[styles.successText, { textAlign: isRTL ? 'right' : 'left' }]}>{successMessage}</Text>
         </View>
       )}
 
@@ -276,4 +276,3 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
-

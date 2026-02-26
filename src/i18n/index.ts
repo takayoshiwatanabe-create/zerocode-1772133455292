@@ -1,66 +1,89 @@
-import * as Localization from "expo-localization";
-import { translations, type Language, type TranslationKeys, type TranslationContent } from "./translations";
 import i18n from "i18next";
-import LanguageDetector from "i18next-browser-languagedetector";
-import { Platform } from "react-native";
+import { initReactI18next } from "react-i18next";
+import * as Localization from "expo-localization";
+import LanguageDetector from 'i18next-browser-languagedetector';
 
-const SUPPORTED_LANGUAGES: Language[] = ["ja", "en", "zh", "ko", "es", "fr", "de", "pt", "ar", "hi"];
+// Import all translation files
+import en from "./locales/en.json";
+import ja from "./locales/ja.json";
+import zh from "./locales/zh.json";
+import ko from "./locales/ko.json";
+import es from "./locales/es.json";
+import fr from "./locales/fr.json";
+import de from "./locales/de.json";
+import pt from "./locales/pt.json";
+import ar from "./locales/ar.json"; // Arabic
+import hi from "./locales/hi.json"; // Hindi
+import { TranslationKeys } from "./translations";
 
-export function getLang(): Language {
-  try {
-    // Use i18n.language if initialized and available
-    if (i18n.isInitialized && i18n.language) {
-      const i18nLang = i18n.language.split('-')[0]; // Take primary language code
-      if (SUPPORTED_LANGUAGES.includes(i18nLang as Language)) {
-        return i18nLang as Language;
-      }
-    }
+// Define resources
+const resources = {
+  en: { translation: en },
+  ja: { translation: ja },
+  zh: { translation: zh },
+  ko: { translation: ko },
+  es: { translation: es },
+  fr: { translation: fr },
+  de: { translation: de },
+  pt: { translation: pt },
+  ar: { translation: ar },
+  hi: { translation: hi },
+};
 
-    if (Platform.OS === 'web') {
-      // Client-side (web): use LanguageDetector
-      // Ensure LanguageDetector is initialized before calling detect
-      // The LanguageDetector is initialized in I18nProvider, so it should be ready here.
-      const detector = new LanguageDetector(null, {
-        order: ['navigator', 'htmlTag', 'path', 'subdomain'],
-        caches: ['localStorage'],
-      });
-      const browserLang = detector.detect();
-      if (browserLang && SUPPORTED_LANGUAGES.includes(browserLang as Language)) {
-        return browserLang as Language;
-      }
-    } else {
-      // React Native: use expo-localization
-      const locales = Localization.getLocales();
-      const deviceLang = locales[0]?.languageCode ?? "ja";
-      if (SUPPORTED_LANGUAGES.includes(deviceLang as Language)) return deviceLang as Language;
-    }
-    return "ja"; // Fallback
-  } catch {
-    return "ja";
-  }
-}
+// Supported languages and their RTL status
+const supportedLanguages = {
+  ja: { rtl: false },
+  en: { rtl: false },
+  zh: { rtl: false },
+  ko: { rtl: false },
+  es: { rtl: false },
+  fr: { rtl: false },
+  de: { rtl: false },
+  pt: { rtl: false },
+  ar: { rtl: true }, // Arabic is RTL
+  hi: { rtl: false },
+};
 
-export function getIsRTL(language?: Language): boolean {
-  const currentLanguage = language || i18n.language.split('-')[0];
-  return ["ar"].includes(currentLanguage);
-}
+// Get device language
+const getDeviceLanguage = (): string => {
+  const locale = Localization.getLocales()[0];
+  const languageCode = locale ? locale.split('-')[0] : 'en';
+  return Object.keys(supportedLanguages).includes(languageCode) ? languageCode : 'en';
+};
 
-export function t(key: TranslationKeys, vars?: Record<string, string | number>): string {
-  // Use i18n's t function if initialized, otherwise fallback to direct lookup
-  if (i18n.isInitialized) {
-    return i18n.t(key, vars as Record<string, string>);
-  }
+const defaultLanguage = getDeviceLanguage(); // Use device language as default
 
-  // Fallback for cases where i18n might not be fully initialized (e.g., very early in app load)
-  const currentLang = getLang();
-  const dict = translations[currentLang] ?? translations.ja;
-  let text = (dict as TranslationContent)[key] ?? (translations.ja as TranslationContent)[key] ?? key;
-  if (vars) {
-    for (const [k, v] of Object.entries(vars)) {
-      text = text.replace(new RegExp(`{{\\s*${k}\\s*}}`, "g"), String(v));
-    }
-  }
-  return text;
-}
+i18n
+  .use(LanguageDetector) // Detect user language
+  .use(initReactI18next) // passes i18n down to react-i18next
+  .init({
+    resources,
+    lng: defaultLanguage, // Set initial language
+    fallbackLng: "en", // fallback language if a translation is not found
+    interpolation: {
+      escapeValue: false, // react already safes from xss
+    },
+    detection: {
+      order: ['localStorage', 'navigator', 'htmlTag', 'path', 'subdomain'],
+      caches: ['localStorage'],
+    },
+    react: {
+      useSuspense: false, // Set to false for Expo Router compatibility
+    },
+  });
 
-export { I18nProvider } from "./I18nProvider";
+export const t = (key: TranslationKeys, options?: Record<string, unknown>): string => {
+  return i18n.t(key, options);
+};
+
+export const getLang = (): string => {
+  return i18n.language;
+};
+
+export const getIsRTL = (lang?: string): boolean => {
+  const currentLang = lang || i18n.language;
+  return supportedLanguages[currentLang as keyof typeof supportedLanguages]?.rtl || false;
+};
+
+export default i18n;
+

@@ -7,6 +7,7 @@ import { WorldMap } from "@/components/game/WorldMap";
 import { useRouter } from "expo-router";
 import { Id } from "@/types";
 import { JobCard } from "@/components/game/JobCard"; // Import JobCard
+import { TranslationKeys } from "@/i18n/translations"; // Import TranslationKeys
 
 export default function GameHome() {
   const { user, logout } = useAuth();
@@ -46,7 +47,7 @@ export default function GameHome() {
         </View>
 
         <Text style={[styles.sectionTitle, { textAlign: isRTL ? 'right' : 'left' }]}>
-          {t("game_world_map_title")}
+          {t("game_world_map_title" as TranslationKeys)}
         </Text>
         <WorldMap
           playerLevel={playerLevel}
@@ -62,25 +63,25 @@ export default function GameHome() {
         {playerLevel >= 2 && (
           <View style={styles.unlockedFeature}>
             <Text style={[styles.unlockedFeatureTitle, { textAlign: isRTL ? 'right' : 'left' }]}>
-              {t("game_unlocked_jobs_title")}
+              {t("game_unlocked_jobs_title" as TranslationKeys)}
             </Text>
             <Text style={[styles.unlockedFeatureText, { textAlign: isRTL ? 'right' : 'left' }]}>
-              {t("game_unlocked_jobs_description")}
+              {t("game_unlocked_jobs_description" as TranslationKeys)}
             </Text>
             {/* Display JobCards for available jobs */}
             <View style={styles.jobCardsContainer}>
               <JobCard
                 jobId="farmer"
-                nameKey="job_farmer_title"
-                descriptionKey="job_farmer_description"
+                nameKey={"job_farmer_title" as TranslationKeys}
+                descriptionKey={"job_farmer_description" as TranslationKeys}
                 requiredLevel={1}
                 playerLevel={playerLevel}
                 onSelectJob={handleSelectJob}
               />
               <JobCard
                 jobId="baker"
-                nameKey="job_baker_title"
-                descriptionKey="job_baker_description"
+                nameKey={"job_baker_title" as TranslationKeys}
+                descriptionKey={"job_baker_description" as TranslationKeys}
                 requiredLevel={2}
                 playerLevel={playerLevel}
                 onSelectJob={handleSelectJob}
@@ -88,7 +89,7 @@ export default function GameHome() {
               {/* Add more job cards as needed, with their respective required levels */}
             </View>
             <TouchableOpacity style={[styles.featureButton, { alignSelf: isRTL ? 'flex-end' : 'flex-start' }]}>
-              <Text style={styles.featureButtonText}>{t("game_view_jobs_button")}</Text>
+              <Text style={styles.featureButtonText}>{t("game_view_jobs_button" as TranslationKeys)}</Text>
             </TouchableOpacity>
           </View>
         )}
@@ -96,13 +97,13 @@ export default function GameHome() {
         {playerLevel >= 5 && (
           <View style={styles.unlockedFeature}>
             <Text style={[styles.unlockedFeatureTitle, { textAlign: isRTL ? 'right' : 'left' }]}>
-              {t("game_unlocked_economy_title")}
+              {t("game_unlocked_economy_title" as TranslationKeys)}
             </Text>
             <Text style={[styles.unlockedFeatureText, { textAlign: isRTL ? 'right' : 'left' }]}>
-              {t("game_unlocked_economy_description")}
+              {t("game_unlocked_economy_description" as TranslationKeys)}
             </Text>
             <TouchableOpacity style={[styles.featureButton, { alignSelf: isRTL ? 'flex-end' : 'flex-start' }]}>
-              <Text style={styles.featureButtonText}>{t("game_view_economy_button")}</Text>
+              <Text style={styles.featureButtonText}>{t("game_view_economy_button" as TranslationKeys)}</Text>
             </TouchableOpacity>
           </View>
         )}
@@ -208,4 +209,3 @@ const styles = StyleSheet.create({
     marginTop: 16,
   },
 });
-

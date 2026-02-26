@@ -64,5 +64,3 @@ export function t(key: TranslationKeys, vars?: Record<string, string | number>):
 }
 
 export { I18nProvider } from "./I18nProvider";
-
-

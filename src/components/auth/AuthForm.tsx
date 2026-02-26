@@ -6,6 +6,7 @@ import { t } from "@/i18n";
 import { getIsRTL } from "@/i18n";
 import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, Platform, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
+import { TranslationKeys } from "@/i18n/translations";
 
 type AuthMode = "signup" | "login" | "mfa";
 
@@ -40,7 +41,7 @@ export function AuthForm() {
     if (mfaRequired) {
       setMode("mfa");
       setError(null);
-      setSuccessMessage(t("mfa_prompt_code"));
+      setSuccessMessage(t("mfa_prompt_code" as TranslationKeys));
     }
   }, [mfaRequired]);
 
@@ -52,18 +53,18 @@ export function AuthForm() {
       if (mode === "login") {
         await login(email, password);
         if (!mfaRequired) {
-          setSuccessMessage(t("login_success"));
+          setSuccessMessage(t("login_success" as TranslationKeys));
         }
       } else if (mode === "signup") {
         await signup(email, password);
-        setSuccessMessage(t("signup_success"));
+        setSuccessMessage(t("signup_success" as TranslationKeys));
         setMode("login");
       } else if (mode === "mfa") {
         await verifyMfa(email, mfaCode);
-        setSuccessMessage(t("mfa_success"));
+        setSuccessMessage(t("mfa_success" as TranslationKeys));
       }
     } catch (err: any) {
-      setError(err.message || t("auth_error_generic"));
+      setError(err.message || t("auth_error_generic" as TranslationKeys));
     }
   };
 
@@ -79,9 +80,9 @@ export function AuthForm() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>
-        {mode === "login" && t("login_title")}
-        {mode === "signup" && t("signup_title")}
-        {mode === "mfa" && t("mfa_title")}
+        {mode === "login" && t("login_title" as TranslationKeys)}
+        {mode === "signup" && t("signup_title" as TranslationKeys)}
+        {mode === "mfa" && t("mfa_title" as TranslationKeys)}
       </Text>
 
       {error && (
@@ -101,7 +102,7 @@ export function AuthForm() {
           <>
             <View>
               <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>
-                {t("email_label")}
+                {t("email_label" as TranslationKeys)}
               </Text>
               <TextInput
                 keyboardType="email-address"
@@ -115,7 +116,7 @@ export function AuthForm() {
             </View>
             <View>
               <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>
-                {t("password_label")}
+                {t("password_label" as TranslationKeys)}
               </Text>
               <TextInput
                 secureTextEntry
@@ -131,7 +132,7 @@ export function AuthForm() {
         {mode === "mfa" && (
           <View>
             <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>
-              {t("mfa_code_label")}
+              {t("mfa_code_label" as TranslationKeys)}
             </Text>
             <TextInput
               keyboardType="numeric"
@@ -152,9 +153,9 @@ export function AuthForm() {
             <ActivityIndicator color="#fff" />
           ) : (
             <Text style={styles.buttonText}>
-              {mode === "login" ? t("login_button") :
-                mode === "signup" ? t("signup_button") :
-                  t("mfa_verify_button")}
+              {mode === "login" ? t("login_button" as TranslationKeys) :
+                mode === "signup" ? t("signup_button" as TranslationKeys) :
+                  t("mfa_verify_button" as TranslationKeys)}
             </Text>
           )}
         </TouchableOpacity>
@@ -168,7 +169,7 @@ export function AuthForm() {
             disabled={isLoading}
           >
             <Text style={styles.toggleModeText}>
-              {mode === "login" ? t("no_account_signup") : t("have_account_login")}
+              {mode === "login" ? t("no_account_signup" as TranslationKeys) : t("have_account_login" as TranslationKeys)}
             </Text>
           </TouchableOpacity>
         </View>
@@ -275,4 +276,3 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
-

@@ -3,6 +3,7 @@ import { UserProfile } from "@/types";
 import { t } from "@/i18n";
 import { Platform } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { TranslationKeys } from "@/i18n/translations";
 
 // Extend UserProfile to include MFA status
 interface AuthUserProfile extends UserProfile {
@@ -35,7 +36,7 @@ const mockApi = {
           });
         }
         else {
-          reject(new Error(t("auth_error_invalid_credentials")));
+          reject(new Error(t("auth_error_invalid_credentials" as TranslationKeys)));
         }
       }, 1000);
     });
@@ -45,7 +46,7 @@ const mockApi = {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         if (email === "existing@example.com") {
-          reject(new Error(t("auth_error_email_exists")));
+          reject(new Error(t("auth_error_email_exists" as TranslationKeys)));
         } else {
           resolve({
             user: { id: `user-${Date.now()}`, nickname: `NewUser${Date.now()}`, language: "en", mfaEnabled: false },
@@ -65,7 +66,7 @@ const mockApi = {
             token: "mock-token-parent-mfa-verified",
           });
         } else {
-          reject(new Error(t("mfa_error_invalid_code")));
+          reject(new Error(t("mfa_error_invalid_code" as TranslationKeys)));
         }
       }, 1000);
     });
@@ -256,5 +257,3 @@ export function useAuth() {
     logout,
   };
 }
-
-

@@ -47,7 +47,8 @@
     "@types/tailwindcss": "^4.0.0-alpha.14",
     "@types/node": "^20.14.2",
     "@next/font": "15.0.0-rc.0",
-    "tailwindcss-react-native": "^1.7.10"
+    "tailwindcss-react-native": "^1.7.10",
+    "@types/react-native": "^0.73.0"
   },
   "resolutions": {
     "react": "18.2.0",

@@ -252,12 +252,103 @@ N/A
 - All components use functional style with proper typing
 
 ## Internationalization (i18n)
-- Supported languages: ja (日本語), en (English), zh (中文), ko (한국어), es (Español), fr (Fançais), de (Deutsch), pt (Português), ar (العربية), hi (हिन्दी)
+- Supported languages: ja (日本語), en (English), zh (中文), ko (한국어), es (Español), fr (Français), de (Deutsch), pt (Português), ar (العربية), hi (हिन्दी)
 - Use the i18n module at `@/i18n` for all user-facing strings
 - Use `t("key")` function for translations — never hardcode UI strings
-- Auto-detect device language via `navigator.language` (for web)
+- Auto-detect device language via expo-localization
 - Default language: ja (Japanese)
 - RTL support required for Arabic (ar)
-- Use `dir="rtl"` attribute on `<html>` or `<body>` for layout adjustments, and `isRTL` flag from i18n module for conditional styling.
+- Use isRTL flag from i18n module for layout adjustments
 
+## Recently Implemented Feature: 認証機能のUIとロジック実装 (2)
 
+### Description
+This feature implements the user authentication UI and logic, including login, signup, and Multi-Factor Authentication (MFA) for parent accounts. It integrates with a mock authentication service and ensures i18n and RTL support.
+
+### Files Involved
+- `src/components/auth/AuthForm.tsx` (UI component for authentication)
+- `src/hooks/useAuth.ts` (Authentication logic hook)
+- `src/i18n/translations.ts` (Translation keys for auth messages)
+- `src/i18n/locales/ja.json` (Japanese translations for auth messages)
+- `src/types/index.ts` (UserProfile type extension)
+- `src/app/page.tsx` (Integration of AuthForm for web)
+- `src/app/_layout.tsx` (Root layout for React Native)
+- `src/app/index.tsx` (Home page for React Native)
+- `src/app/layout.tsx` (Root layout for Next.js web)
+- `src/i18n/I18nProvider.tsx` (i18n context provider)
+- `src/i18n/index.ts` (i18n utility functions)
+- `app/_layout.tsx` (Expo Router root layout)
+- `app/index.tsx` (Expo Router home screen)
+- `i18n/I18nProvider.tsx` (Expo i18n context provider)
+- `i18n/index.ts` (Expo i18n utility functions)
+- `i18n/translations.ts` (Expo translations)
+- `types/index.ts` (Expo types)
+
+### UI/UX Details
+- **AuthForm Component (`src/components/auth/AuthForm.tsx`):**
+    - Displays login, signup, and MFA forms.
+    - Transitions between login/signup modes.
+    - Shows loading indicator during API calls.
+    - Displays error/success messages.
+    - **RTL Support:**
+        - Text alignment for labels and input fields should dynamically adjust based on `isRTL` flag.
+        - Overall form layout should respect `I18nManager.forceRTL` for React Native.
+    - **Styling:** Uses inline styles for React Native compatibility, mapping to TailwindCSS conventions where possible.
+- **Root Layouts (`src/app/layout.tsx`, `src/app/_layout.tsx`, `app/_layout.tsx`):**
+    - `I18nProvider` wraps the entire application to provide i18n context.
+    - `html` tag `dir` attribute set for web (LTR/RTL).
+    - `I18nManager.forceRTL` and `I18nManager.allowRTL` used for React Native.
+
+### Logic Details
+- **`useAuth` Hook (`src/hooks/useAuth.ts`):**
+    - Manages authentication state (isAuthenticated, user, token, isLoading, error, mfaRequired).
+    - Provides `login`, `signup`, `verifyMfa`, `logout` functions.
+    - **MFA Implementation:**
+        - `login` function can return `mfaRequired: true` to trigger MFA flow.
+        - `verifyMfa` function handles MFA code verification.
+        - `UserProfile` type extended to include `mfaEnabled: boolean`.
+    - Uses mock API calls for demonstration.
+    - **No `localStorage` for React Native:** Persistent storage (e.g., `AsyncStorage`) is not implemented in this mock for RN, but noted as a future consideration.
+- **i18n Integration (`src/i18n/`, `i18n/`):**
+    - `getLang()` and `getIsRTL()` functions determine current language and RTL status.
+    - `t()` function used for all UI strings.
+    - `I18nProvider` initializes `i18next` and manages `I18nManager` for React Native and `dir` attribute for web.
+
+### Data Structures
+- **`src/types/index.ts` / `types/index.ts`:**
+    - `UserProfile` type updated to include `mfaEnabled: boolean;`.
+
+### Security Considerations
+- **[RULE-TECH-002] 認証セキュリティ:**
+    - MFA (Multi-Factor Authentication) is provided for parent accounts.
+    - Mock implementation demonstrates the flow, but actual MFA logic (e.g., code generation, secure storage) is not part of this mock.
+- **[RULE-SAFETY-001] 自由入力チャットの完全禁止:**
+    - Nickname registration is the only place text input is allowed for children (not directly implemented in this auth flow, but noted as a general rule). The current auth form is for parents.
+
+### Accessibility
+- **[RULE-TECH-004] アクセシビリティ:**
+    - RTL language (Arabic) full layout inversion support is explicitly handled in `I18nProvider` and `AuthForm` for text alignment.
+    - WCAG 2.1 AA compliance is a general project goal.
+
+---
+
+## Technical Stack
+- Next.js 15 + React 19 + TypeScript (strict mode)
+- TailwindCSS 4
+- Vitest for unit tests
+- Playwright for E2E tests
+
+## Code Standards
+- TypeScript strict mode, no `any`
+- Minimal comments — code should be self-documenting
+- Use path alias `@/` for imports from `src/`
+- All components use functional style with proper typing
+
+## Internationalization (i18n)
+- Supported languages: ja (日本語), en (English), zh (中文), ko (한국어), es (Español), fr (Français), de (Deutsch), pt (Português), ar (العربية), hi (हिन्दी)
+- Use the i18n module at `@/i18n` for all user-facing strings
+- Use `t("key")` function for translations — never hardcode UI strings
+- Auto-detect device language via expo-localization
+- Default language: ja (Japanese)
+- RTL support required for Arabic (ar)
+- Use isRTL flag from i18n module for layout adjustments

@@ -2,7 +2,10 @@ import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { I18nProvider } from "@/i18n/I18nProvider";
-import { getIsRTL } from "@/i18n"; // Import getIsRTL for potential layout adjustments
+// getIsRTL is not directly used here, I18nProvider handles I18nManager.
+// import { getIsRTL } from "@/i18n"; 
+// AuthForm is a component to be rendered within a screen, not the root layout.
+// import { AuthForm } from "@/components/auth/AuthForm"; 
 
 export default function RootLayout() {
   // In Expo Router, the root layout is a good place to set global RTL if needed
@@ -21,4 +24,3 @@ export default function RootLayout() {
     </I18nProvider>
   );
 }
-

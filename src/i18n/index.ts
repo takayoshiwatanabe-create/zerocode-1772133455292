@@ -1,41 +1,59 @@
-import i18n from "i18next";
-import LanguageDetector from "i18next-browser-languagedetector";
+import * as Localization from "expo-localization";
 import { translations, type Language } from "./translations";
+import i18n from "i18next"; // Import i18n instance
+import LanguageDetector from "i18next-browser-languagedetector"; // Import for web detection
+import { Platform } from "react-native"; // Import Platform for conditional logic
 
 const SUPPORTED_LANGUAGES: Language[] = ["ja", "en", "zh", "ko", "es", "fr", "de", "pt", "ar", "hi"];
 
-// Function to get language, works on both server and client
 export function getLang(): Language {
-  if (typeof window !== 'undefined') {
-    // Client-side: use LanguageDetector
-    const detector = new LanguageDetector(null, {
-      order: ['navigator', 'htmlTag', 'path', 'subdomain'],
-      caches: ['localStorage'],
-    });
-    const browserLang = detector.detect();
-    if (browserLang && SUPPORTED_LANGUAGES.includes(browserLang as Language)) {
-      return browserLang as Language;
+  try {
+    // Use i18n.language if initialized and available
+    if (i18n.isInitialized && i18n.language) {
+      const i18nLang = i18n.language.split('-')[0]; // Take primary language code
+      if (SUPPORTED_LANGUAGES.includes(i18nLang as Language)) {
+        return i18nLang as Language;
+      }
     }
-  } else {
-    // Server-side: default to 'ja' or implement server-side detection if needed
-    // For Next.js, you might get this from headers or a cookie in a real app
-    // For now, we'll default to 'ja' on the server for initial render
+
+    if (Platform.OS === 'web') {
+      // Client-side (web): use LanguageDetector
+      // Ensure LanguageDetector is initialized before calling detect
+      // The LanguageDetector is initialized in I18nProvider, so it should be ready here.
+      const detector = new LanguageDetector(null, {
+        order: ['navigator', 'htmlTag', 'path', 'subdomain'],
+        caches: ['localStorage'],
+      });
+      const browserLang = detector.detect();
+      if (browserLang && SUPPORTED_LANGUAGES.includes(browserLang as Language)) {
+        return browserLang as Language;
+      }
+    } else {
+      // React Native: use expo-localization
+      const locales = Localization.getLocales();
+      const deviceLang = locales[0]?.languageCode ?? "ja";
+      if (SUPPORTED_LANGUAGES.includes(deviceLang as Language)) return deviceLang as Language;
+    }
+    return "ja"; // Fallback
+  } catch {
     return "ja";
   }
-  return "ja"; // Fallback
 }
 
-export function getIsRTL(language: Language): boolean {
-  return ["ar"].includes(language);
+// getIsRTL should not take a language argument if it's meant to use the current i18n language
+// It should rely on i18n.language for consistency with the rest of the i18n setup.
+export function getIsRTL(language?: Language): boolean {
+  const currentLanguage = language || i18n.language.split('-')[0];
+  return ["ar"].includes(currentLanguage);
 }
 
 export function t(key: string, vars?: Record<string, string | number>): string {
-  // Ensure i18n is initialized before using its t function
+  // Use i18n's t function if initialized, otherwise fallback to direct lookup
   if (i18n.isInitialized) {
     return i18n.t(key, vars as Record<string, string>);
   }
 
-  // Fallback for server-side rendering or before i18n is initialized on client
+  // Fallback for cases where i18n might not be fully initialized (e.g., very early in app load)
   const currentLang = getLang();
   const dict = translations[currentLang] ?? translations.ja;
   let text = dict[key] ?? translations.ja[key] ?? key;
@@ -48,4 +66,3 @@ export function t(key: string, vars?: Record<string, string | number>): string {
 }
 
 export { I18nProvider } from "./I18nProvider";
-

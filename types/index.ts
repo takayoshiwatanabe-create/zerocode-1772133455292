@@ -72,4 +72,3 @@ export type Achievement = {
  */
 import { Language } from "@/i18n/translations";
 export type { Language };
-

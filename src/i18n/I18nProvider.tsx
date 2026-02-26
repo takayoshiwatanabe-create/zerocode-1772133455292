@@ -6,6 +6,7 @@ import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import { translations } from "./translations";
 import { getLang, getIsRTL } from "./index"; // Import functions for client-side
+import { I18nManager, Platform } from "react-native"; // Import I18nManager and Platform for React Native
 
 interface I18nProviderProps {
   children: ReactNode;
@@ -37,11 +38,28 @@ export function I18nProvider({ children }: I18nProviderProps) {
   const isRTL = getIsRTL(currentLang);
 
   useEffect(() => {
-    // Set HTML dir attribute based on RTL status
-    document.documentElement.setAttribute('dir', isRTL ? 'rtl' : 'ltr');
-    document.documentElement.setAttribute('lang', currentLang);
+    if (Platform.OS === 'web') {
+      // Set HTML dir attribute based on RTL status for web
+      if (typeof document !== 'undefined') {
+        document.documentElement.setAttribute('dir', isRTL ? 'rtl' : 'ltr');
+        document.documentElement.setAttribute('lang', currentLang);
+      }
+    } else {
+      // For React Native, use I18nManager
+      // Only forceRTL if it's different to avoid unnecessary reloads/re-renders
+      if (I18nManager.isRTL !== isRTL) {
+        I18nManager.forceRTL(isRTL);
+        I18nManager.allowRTL(isRTL);
+        // Note: Forcing RTL might require a reload for some components to fully adjust.
+        // In a real app, you might want to prompt the user to restart or handle this more gracefully.
+        // For this mock, we assume a restart or full re-render is handled by the framework/app lifecycle.
+      }
+    }
+    // Update i18n instance language if it changes (e.g., user changes language in settings)
+    if (i18n.language !== currentLang) {
+      i18n.changeLanguage(currentLang);
+    }
   }, [isRTL, currentLang]);
 
   return <>{children}</>;
 }
-

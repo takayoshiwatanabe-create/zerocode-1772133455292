@@ -3,27 +3,33 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
+    "dev": "expo start --web",
+    "build": "expo export:web",
+    "start": "expo start",
+    "lint": "eslint .",
     "test": "vitest",
     "test:e2e": "playwright test",
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "next": "15.0.0-rc.0",
-    "react": "19.0.0-rc-f99473714c-20240522",
-    "react-dom": "19.0.0-rc-f99473714c-20240522",
+    "expo": "~51.0.14",
+    "expo-status-bar": "~1.12.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-native": "0.74.2",
+    "react-native-web": "~0.19.10",
     "react-i18next": "^14.1.2",
     "i18next": "^23.11.5",
     "i18next-browser-languagedetector": "^8.0.0",
-    "tailwind-merge": "^2.3.0"
+    "tailwind-merge": "^2.3.0",
+    "expo-router": "~3.5.16",
+    "expo-localization": "~15.0.3",
+    "next": "15.0.0-rc.0"
   },
   "devDependencies": {
-    "@types/node": "^20.14.2",
-    "@types/react": "npm:types-react@rc",
-    "@types/react-dom": "npm:types-react-dom@rc",
+    "@babel/core": "^7.20.0",
+    "@types/react": "~18.2.45",
+    "@types/react-dom": "~18.2.45",
     "@types/react-i18next": "^8.1.0",
     "typescript": "^5.7.0",
     "postcss": "^8.4.38",
@@ -32,7 +38,9 @@
     "eslint-config-next": "15.0.0-rc.0",
     "vitest": "^1.6.0",
     "@playwright/test": "^1.44.1",
-    "autoprefixer": "^10.4.19"
+    "autoprefixer": "^10.4.19",
+    "@types/i18next": "^13.0.0",
+    "@types/i18next-browser-languagedetector": "^3.0.0",
+    "@types/expo-localization": "^15.0.0"
   }
 }
-

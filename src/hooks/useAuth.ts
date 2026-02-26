@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { UserProfile } from "@/types";
 import { t } from "@/i18n";
-import { Platform } from "react-native"; // Import Platform for conditional storage
+import { Platform } from "react-native";
 
 // Extend UserProfile to include MFA status
 interface AuthUserProfile extends UserProfile {
@@ -39,8 +39,6 @@ const mockApi = {
         if (email === "existing@example.com") {
           reject(new Error(t("auth_error_email_exists")));
         } else {
-          // Simulate successful signup, MFA is optional and can be enabled later
-          // Per design, signup does not automatically log in. It returns user/token but these are not used to set auth state.
           resolve({
             user: { id: `user-${Date.now()}`, nickname: `NewUser${Date.now()}`, language: "en", mfaEnabled: false },
             token: `mock-token-newuser-${Date.now()}`,
@@ -81,7 +79,7 @@ interface AuthState {
   token: string | null;
   isLoading: boolean;
   error: string | null;
-  mfaRequired: boolean; // New state to indicate if MFA is required after login attempt
+  mfaRequired: boolean;
 }
 
 const initialState: AuthState = {
@@ -96,7 +94,6 @@ const initialState: AuthState = {
 export function useAuth() {
   const [state, setState] = useState<AuthState>(initialState);
 
-  // Load auth state from storage on initial render
   useEffect(() => {
     const loadAuthState = async () => {
       try {
@@ -139,9 +136,9 @@ export function useAuth() {
         setState((prevState) => ({
           ...prevState,
           isLoading: false,
-          user, // Store user info temporarily even if MFA is required
+          user,
           mfaRequired: true,
-          error: null, // Clear error, as MFA prompt is not an error
+          error: null,
         }));
       } else {
         if (Platform.OS === 'web' && typeof window !== 'undefined' && window.localStorage) {
@@ -164,24 +161,19 @@ export function useAuth() {
         isLoading: false,
         mfaRequired: false,
       }));
-      throw err; // Re-throw to allow UI to catch and display
+      throw err;
     }
   }, []);
 
   const signup = useCallback(async (email: string, password: string) => {
     setState((prevState) => ({ ...prevState, isLoading: true, error: null }));
     try {
-      // mockApi.signup returns {user, token}, but per the design, signup does not automatically log in.
-      // We just need to ensure the call completes successfully.
       await mockApi.signup(email, password);
       setState((prevState) => ({
         ...prevState,
         isLoading: false,
         error: null,
-        // No isAuthenticated, user, token set here as per design for signup
       }));
-      // The design spec for signup_success says "Please log in.", so returning user is not strictly necessary
-      // but can be kept for consistency if needed elsewhere.
     } catch (err: any) {
       setState((prevState) => ({
         ...prevState,
@@ -244,3 +236,4 @@ export function useAuth() {
     logout,
   };
 }
+

@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, Platform } from "react-native";
 import { t } from "@/i18n";
 import { getIsRTL, getLang } from "@/i18n";
 import { AuthForm } from "@/components/auth/AuthForm";
@@ -18,6 +18,8 @@ export default function HomePage() {
           paddingBottom: insets.bottom,
           paddingLeft: insets.left,
           paddingRight: insets.right,
+          // Apply text direction for the whole container on native
+          direction: isRTL ? "rtl" : "ltr",
         },
       ]}
     >
@@ -56,14 +58,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff', // Added background color for consistency
   },
   title: {
-    fontSize: 32, // Adjusted from 40 to 32 for better fit on mobile, keeping web at 40
+    fontSize: Platform.OS === 'web' ? 40 : 32, // Adjusted from 40 to 32 for better fit on mobile, keeping web at 40
     fontWeight: "bold",
     color: "#1d4ed8",
     marginBottom: 16,
   },
   subtitle: {
     marginTop: 16, // Adjusted from 20 to 16 for better fit on mobile
-    fontSize: 18, // Adjusted from 20 to 18 for better fit on mobile
+    fontSize: Platform.OS === 'web' ? 20 : 18, // Adjusted from 20 to 18 for better fit on mobile
     color: "#374151",
   },
 });
+

@@ -1,8 +1,8 @@
 import { Stack } from "expo-router";
 import { I18nProvider } from "@/i18n/I18nProvider";
 import { useEffect } from "react";
-import { I18nManager } from "react-native";
-import { getIsRTL, getLang } from "@/i18n"; // Import getLang and getIsRTL
+import { I18nManager, Platform } from "react-native";
+import { getIsRTL, getLang } from "@/i18n";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
 
@@ -13,11 +13,14 @@ export default function RootLayout() {
   useEffect(() => {
     // This effect ensures I18nManager is correctly set for React Native
     // based on the detected language's RTL status.
-    if (I18nManager.isRTL !== isRTL) {
-      I18nManager.forceRTL(isRTL);
-      I18nManager.allowRTL(isRTL);
-      // A full app reload might be necessary for some components to fully adapt.
-      // In a real application, this might involve a user prompt or more complex state management.
+    if (Platform.OS !== 'web') { // Only apply for React Native
+      if (I18nManager.isRTL !== isRTL) {
+        I18nManager.forceRTL(isRTL);
+        I18nManager.allowRTL(isRTL);
+        // A full app reload might be necessary for some components to fully adapt.
+        // In a real application, this might involve a user prompt or more complex state management.
+        // For now, we rely on Expo Router's hot reloading or a manual restart for full effect.
+      }
     }
   }, [isRTL]);
 
@@ -34,3 +37,4 @@ export default function RootLayout() {
     </I18nProvider>
   );
 }
+

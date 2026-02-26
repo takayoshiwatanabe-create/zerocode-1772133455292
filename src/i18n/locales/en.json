@@ -33,5 +33,16 @@
   "child_activity_card_stock_holdings": "Stock Holdings:",
   "child_activity_card_pending_purchases": "Pending Purchases:",
   "child_activity_card_view_details": "View Details",
-  "locale_code": "en-US"
+  "locale_code": "en-US",
+  "purchase_approval_modal_title": "Purchase Approval",
+  "purchase_approval_modal_child_name": "Child's Name:",
+  "purchase_approval_modal_item_name": "Item Name:",
+  "purchase_approval_modal_item_description": "Item Description:",
+  "purchase_approval_modal_cost": "Cost:",
+  "purchase_approval_modal_timestamp": "Request Timestamp:",
+  "purchase_approval_modal_approve_button": "Approve",
+  "purchase_approval_modal_reject_button": "Reject",
+  "purchase_approval_modal_close_button": "Close",
+  "points_unit": "points",
+  "real_money_unit": "USD"
 }

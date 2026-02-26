@@ -1,10 +1,12 @@
 import { StyleSheet, Text, View } from "react-native";
 import { t } from "@/i18n";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { isRTL } from "@/i18n";
+import { getIsRTL, getLang } from "@/i18n"; // Import getIsRTL and getLang
 
 export default function HomeScreen() {
   const insets = useSafeAreaInsets();
+  const currentLang = getLang();
+  const isRTL = getIsRTL(currentLang);
 
   return (
     <View
@@ -15,12 +17,14 @@ export default function HomeScreen() {
           paddingBottom: insets.bottom,
           paddingLeft: insets.left,
           paddingRight: insets.right,
-          flexDirection: isRTL ? "row-reverse" : "row", // Example RTL adjustment
+          // Apply RTL styling conditionally
+          flexDirection: isRTL ? "row-reverse" : "row",
+          textAlign: isRTL ? "right" : "left",
         },
       ]}
     >
-      <Text style={styles.title}>{t("app_name")}</Text>
-      <Text style={styles.subtitle}>{t("welcome_message")}</Text>
+      <Text style={[styles.title, { textAlign: isRTL ? "right" : "left" }]}>{t("app_name")}</Text>
+      <Text style={[styles.subtitle, { textAlign: isRTL ? "right" : "left" }]}>{t("welcome_message")}</Text>
     </View>
   );
 }

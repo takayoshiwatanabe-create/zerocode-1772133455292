@@ -20,7 +20,7 @@ This file is the single source of truth for this project. All code must conform 
 ### 1.2 設計哲学（不変の原則）
 
 | 原則 | 説明 |
-|------|------|
+|------|--------|
 | **Safety First** | 子どもの安全はすべての機能設計より優先される |
 | **Education Through Play** | 教育コンテンツはゲームプレイの妨げにならない形で自然に組み込む |
 | **Economic Transparency** | ゲーム内経済（ポイント・株・課金）は保護者が完全に把握できる |
@@ -252,10 +252,12 @@ N/A
 - All components use functional style with proper typing
 
 ## Internationalization (i18n)
-- Supported languages: ja (日本語), en (English), zh (中文), ko (한국어), es (Español), fr (Français), de (Deutsch), pt (Português), ar (العربية), hi (हिन्दी)
+- Supported languages: ja (日本語), en (English), zh (中文), ko (한국어), es (Español), fr (Fançais), de (Deutsch), pt (Português), ar (العربية), hi (हिन्दी)
 - Use the i18n module at `@/i18n` for all user-facing strings
 - Use `t("key")` function for translations — never hardcode UI strings
-- Auto-detect device language via expo-localization
+- Auto-detect device language via `navigator.language` (for web)
 - Default language: ja (Japanese)
 - RTL support required for Arabic (ar)
-- Use isRTL flag from i18n module for layout adjustments
+- Use `dir="rtl"` attribute on `<html>` or `<body>` for layout adjustments, and `isRTL` flag from i18n module for conditional styling.
+
+

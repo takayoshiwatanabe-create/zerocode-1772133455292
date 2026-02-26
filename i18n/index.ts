@@ -1,5 +1,5 @@
 import * as Localization from "expo-localization";
-import { translations, type Language } from "./translations";
+import { translations, type Language, TranslationKeys } from "./translations";
 import i18n from "i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 import { Platform } from "react-native";
@@ -45,7 +45,7 @@ export function getIsRTL(language?: Language): boolean {
   return ["ar"].includes(currentLanguage);
 }
 
-export function t(key: string, vars?: Record<string, string | number>): string {
+export function t(key: TranslationKeys, vars?: Record<string, string | number>): string {
   // Use i18n's t function if initialized, otherwise fallback to direct lookup
   if (i18n.isInitialized) {
     return i18n.t(key, vars as Record<string, string>);
@@ -54,7 +54,7 @@ export function t(key: string, vars?: Record<string, string | number>): string {
   // Fallback for cases where i18n might not be fully initialized (e.g., very early in app load)
   const currentLang = getLang();
   const dict = translations[currentLang] ?? translations.ja;
-  let text = dict[key] ?? translations.ja[key] ?? key;
+  let text = (dict as Record<string, string>)[key] ?? (translations.ja as Record<string, string>)[key] ?? key;
   if (vars) {
     for (const [k, v] of Object.entries(vars)) {
       text = text.replace(new RegExp(`{{\\s*${k}\\s*}}`, "g"), String(v));
@@ -64,4 +64,5 @@ export function t(key: string, vars?: Record<string, string | number>): string {
 }
 
 export { I18nProvider } from "./I18nProvider";
+
 

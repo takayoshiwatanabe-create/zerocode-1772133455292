@@ -26,7 +26,14 @@ const mockApi = {
             token: "mock-token-admin",
             mfaRequired: false,
           });
-        } else {
+        } else if (email === "child@example.com" && password === "ChildPass123!") {
+          resolve({
+            user: { id: "child-1", nickname: "GamePlayer", language: "en", mfaEnabled: false },
+            token: "mock-token-child",
+            mfaRequired: false,
+          });
+        }
+        else {
           reject(new Error(t("auth_error_invalid_credentials")));
         }
       }, 1000);
@@ -236,4 +243,5 @@ export function useAuth() {
     logout,
   };
 }
+
 

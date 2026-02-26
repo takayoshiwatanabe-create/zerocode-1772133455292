@@ -1,16 +1,14 @@
-import type { Config } from 'tailwindcss';
+import type { Config } from 'tailwindcss'; // Correct import
 
 const config: Config = {
   content: [
-    './src/**/*.{js,jsx,ts,tsx}',
-    './app/**/*.{js,jsx,ts,tsx}',
-    './components/**/*.{js,jsx,ts,tsx}',
+    './src/**/*.{js,ts,jsx,tsx,mdx}',
+    './app/**/*.{js,ts,jsx,tsx,mdx}',
+    './components/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
     extend: {},
   },
   plugins: [],
 };
-
 export default config;
-

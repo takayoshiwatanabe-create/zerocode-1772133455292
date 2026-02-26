@@ -25,7 +25,14 @@ export function AuthForm() {
     if (isAuthenticated && user) {
       setSuccessMessage(t("auth_success_welcome", { nickname: user.nickname }));
       setError(null);
-      router.replace("/(parent)/dashboard");
+      // Determine redirect based on user type or a specific flag in user object
+      // For this mock, we assume 'parent@example.com' is a parent, others are game users.
+      // In a real app, user.role or similar would be used.
+      if (user.id === "parent-1" || user.id === "admin-1") { // Mock parent/admin user IDs
+        router.replace("/(parent)/dashboard");
+      } else {
+        router.replace("/(game)/home");
+      }
     }
   }, [isAuthenticated, user, router]);
 
@@ -268,4 +275,3 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
-

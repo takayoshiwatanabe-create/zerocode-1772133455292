@@ -4,7 +4,7 @@ import { ActivityIndicator, View, Text, Platform } from "react-native";
 import { t } from "@/i18n";
 import React from "react";
 
-export default function ParentLayout() {
+export default function GameLayout() {
   const { isAuthenticated, isLoading } = useAuth();
 
   if (isLoading) {
@@ -17,7 +17,7 @@ export default function ParentLayout() {
   }
 
   if (!isAuthenticated) {
-    // Only authenticated parents should access this route group.
+    // Only authenticated users (children or parents) should access this route group.
     // Redirect to the login page if not authenticated.
     // For web, redirect to /page.tsx, for native, redirect to /index.tsx
     return <Redirect href={Platform.OS === 'web' ? "/page" : "/"} />;
@@ -25,9 +25,8 @@ export default function ParentLayout() {
 
   return (
     <Stack>
-      <Stack.Screen name="dashboard" options={{ title: t("parent_dashboard_title_short"), headerShown: false }} />
-      {/* Add other parent-specific screens here */}
+      <Stack.Screen name="home" options={{ title: t("game_home_title"), headerShown: false }} />
+      {/* Add other game-specific screens here */}
     </Stack>
   );
 }
-

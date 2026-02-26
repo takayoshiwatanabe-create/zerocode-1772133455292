@@ -30,6 +30,7 @@ export default function RootLayout() {
         <Stack>
           <Stack.Screen name="index" options={{ headerShown: false }} />
           <Stack.Screen name="(parent)" options={{ headerShown: false }} />
+          <Stack.Screen name="(game)" options={{ headerShown: false }} />
           {/* Add other screens here */}
         </Stack>
         <StatusBar style="auto" />
@@ -37,4 +38,5 @@ export default function RootLayout() {
     </I18nProvider>
   );
 }
+
 

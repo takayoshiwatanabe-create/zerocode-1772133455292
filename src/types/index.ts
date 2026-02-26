@@ -6,6 +6,12 @@
 export type Id = string | number;
 
 /**
+ * Type for supported languages, imported from i18n module.
+ */
+import { Language } from "@/i18n/translations";
+export type { Language };
+
+/**
  * Basic user profile information.
  */
 export type UserProfile = {
@@ -67,9 +73,4 @@ export type Achievement = {
   condition: string; // e.g., "complete 5 jobs", "visit 3 locations"
 };
 
-/**
- * Type for supported languages, imported from i18n module.
- */
-import { Language } from "@/i18n/translations";
-export type { Language };
 

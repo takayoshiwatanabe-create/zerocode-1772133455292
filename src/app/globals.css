@@ -45,3 +45,8 @@ main {
   min-height: 100vh;
 }
 
+/* Fix for Next.js 15 RC with Expo Router on web */
+/* The root div that Expo Router renders into needs to fill the height */
+#__next > div {
+  height: 100%;
+}

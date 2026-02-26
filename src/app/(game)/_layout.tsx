@@ -26,8 +26,8 @@ export default function GameLayout() {
   return (
     <Stack>
       <Stack.Screen name="home" options={{ title: t("game_home_title"), headerShown: false }} />
+      <Stack.Screen name="chat" options={{ title: t("chat_screen_title"), headerShown: false }} />
       {/* Add other game-specific screens here */}
     </Stack>
   );
 }
-

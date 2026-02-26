@@ -51,7 +51,7 @@ export function WorldMap({ playerLevel, currentLocation, onLocationSelect }: Wor
       <Image
         source={{ uri: 'https://via.placeholder.com/600x400/a7f3d0/065f46?text=World+Map' }} // Placeholder map image
         style={styles.mapImage}
-        accessibilityLabel={t("game_world_map_alt_text")}
+        accessibilityLabel={t("game_world_map_alt_text" as TranslationKeys)}
       />
 
       {mockWorldLocations.map((location) => {
@@ -74,7 +74,7 @@ export function WorldMap({ playerLevel, currentLocation, onLocationSelect }: Wor
             ]}
             onPress={() => isAccessible && onLocationSelect(location.id)}
             disabled={!isAccessible}
-            accessibilityLabel={t("game_map_location_pin", { locationName: t(location.nameKey as TranslationKeys) })}
+            accessibilityLabel={t("game_map_location_pin" as TranslationKeys, { locationName: t(location.nameKey as TranslationKeys) })}
           >
             <Text style={styles.locationPinText}>
               {t(location.nameKey as TranslationKeys)}
@@ -94,18 +94,18 @@ export function WorldMap({ playerLevel, currentLocation, onLocationSelect }: Wor
       })}
 
       <View style={[styles.legendContainer, { alignItems: isRTL ? 'flex-end' : 'flex-start' }]}>
-        <Text style={styles.legendTitle}>{t("game_map_legend_title")}</Text>
+        <Text style={styles.legendTitle}>{t("game_map_legend_title" as TranslationKeys)}</Text>
         <View style={[styles.legendItem, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
           <View style={[styles.legendColorBox, { backgroundColor: '#fcd34d' }]} />
-          <Text style={styles.legendText}>{t("game_map_legend_current_location")}</Text>
+          <Text style={styles.legendText}>{t("game_map_legend_current_location" as TranslationKeys)}</Text>
         </View>
         <View style={[styles.legendItem, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
           <View style={[styles.legendColorBox, { backgroundColor: '#3b82f6' }]} />
-          <Text style={styles.legendText}>{t("game_map_legend_unlocked_location")}</Text>
+          <Text style={styles.legendText}>{t("game_map_legend_unlocked_location" as TranslationKeys)}</Text>
         </View>
         <View style={[styles.legendItem, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
           <View style={[styles.legendColorBox, { backgroundColor: '#9ca3af' }]} />
-          <Text style={styles.legendText}>{t("game_map_legend_locked_location")}</Text>
+          <Text style={styles.legendText}>{t("game_map_legend_locked_location" as TranslationKeys)}</Text>
         </View>
       </View>
     </View>
@@ -222,4 +222,3 @@ const styles = StyleSheet.create({
     color: '#374151',
   },
 });
-

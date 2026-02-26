@@ -48,11 +48,11 @@
     "@types/node": "^20.14.2",
     "@next/font": "15.0.0-rc.0",
     "tailwindcss-react-native": "^1.7.10",
-    "@types/react-native": "^0.73.0"
+    "@types/react-native": "^0.73.0",
+    "@types/react-native-web": "^0.19.12"
   },
   "resolutions": {
     "react": "18.2.0",
     "react-dom": "18.2.0"
   }
 }
-

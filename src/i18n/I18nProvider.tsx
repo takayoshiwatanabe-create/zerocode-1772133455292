@@ -4,7 +4,7 @@ import React, { ReactNode, useEffect } from "react";
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
-import { translations } from "./translations";
+import { translations, TranslationContent } from "./translations"; // Import TranslationContent
 import { getLang, getIsRTL } from "./index";
 import { I18nManager, Platform } from "react-native";
 
@@ -18,9 +18,9 @@ i18n
   .use(initReactI18next)
   .init({
     resources: Object.entries(translations).reduce((acc, [key, value]) => {
-      acc[key] = { translation: value };
+      acc[key] = { translation: value as TranslationContent }; // Cast value to TranslationContent
       return acc;
-    }, {} as Record<string, { translation: Record<string, string> }>),
+    }, {} as Record<string, { translation: TranslationContent }>), // Use TranslationContent here
     fallbackLng: "ja",
     lng: getLang(), // Use the detected language from index.ts
     debug: false,

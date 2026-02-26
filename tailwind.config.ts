@@ -1,10 +1,10 @@
 import type { Config } from 'tailwindcss';
-import { withExpo } from 'tailwindcss-react-native/dist/withExpo';
+import withExpo from 'tailwindcss-react-native/dist/withExpo';
 
 const config: Config = {
   content: [
-    './src/**/*.{js,jsx,ts,tsx}',
-    './app/**/*.{js,jsx,ts,tsx}',
+    './src/app/**/*.{js,jsx,ts,tsx}',
+    './src/components/**/*.{js,jsx,ts,tsx}',
   ],
   theme: {
     extend: {},
@@ -13,4 +13,3 @@ const config: Config = {
 };
 
 export default withExpo(config);
-

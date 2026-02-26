@@ -9,7 +9,7 @@ import { TranslationKeys } from "@/i18n/translations"; // Import TranslationKeys
 
 export default function GameChatScreen() {
   const { user, isLoading: authLoading } = useAuth();
-  const isRTL = getIsRTL(); // Corrected function call
+  const isRTL = getIsRTL();
 
   // Mock state for chat functionality
   const [currentRecipientId, setCurrentRecipientId] = useState<Id | null>(null);
@@ -222,3 +222,4 @@ const styles = StyleSheet.create({
     width: '100%',
   },
 });
+

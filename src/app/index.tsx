@@ -3,6 +3,8 @@ import { t } from "@/i18n";
 import { getIsRTL, getLang } from "@/i18n";
 import { AuthForm } from "@/components/auth/AuthForm";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { TranslationKeys } from "@/i18n/translations";
+import React from "react"; // Import React
 
 export default function HomePage() {
   const insets = useSafeAreaInsets();
@@ -31,7 +33,7 @@ export default function HomePage() {
           },
         ]}
       >
-        {t("app_name")}
+        {t("app_name" as TranslationKeys)}
       </Text>
       <Text
         style={[
@@ -42,7 +44,7 @@ export default function HomePage() {
           },
         ]}
       >
-        {t("welcome_message")}
+        {t("welcome_message" as TranslationKeys)}
       </Text>
       <AuthForm />
     </View>
@@ -69,4 +71,3 @@ const styles = StyleSheet.create({
     color: "#374151",
   },
 });
-

@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { t } from "@/i18n";
 import { getIsRTL } from "@/i18n";
+import { TranslationKeys } from "@/i18n/translations";
 
 interface ChildData {
   id: string;
@@ -22,7 +23,7 @@ export function ChildActivityCard({ child }: ChildActivityCardProps) {
   const formatLastActive = (isoString: string) => {
     const date = new Date(isoString);
     // Use the locale_code from translations for toLocaleDateString
-    return date.toLocaleDateString(t("locale_code"), {
+    return date.toLocaleDateString(t("locale_code" as TranslationKeys), {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
@@ -41,16 +42,16 @@ export function ChildActivityCard({ child }: ChildActivityCardProps) {
       <View style={[styles.textContainer, { alignItems: isRTL ? 'flex-end' : 'flex-start' }]}>
         <Text style={styles.nickname}>{child.nickname}</Text>
         <Text style={[styles.detailText, { textAlign: isRTL ? 'right' : 'left' }]}>
-          {t("child_activity_card_last_active")} {formatLastActive(child.lastActive)}
+          {t("child_activity_card_last_active" as TranslationKeys)} {formatLastActive(child.lastActive)}
         </Text>
         <Text style={[styles.detailText, { textAlign: isRTL ? 'right' : 'left' }]}>
-          {t("child_activity_card_points")} {child.points}
+          {t("child_activity_card_points" as TranslationKeys)} {child.points}
         </Text>
         <Text style={[styles.detailText, { textAlign: isRTL ? 'right' : 'left' }]}>
-          {t("child_activity_card_stock_holdings")} {child.stockHoldings}
+          {t("child_activity_card_stock_holdings" as TranslationKeys)} {child.stockHoldings}
         </Text>
         <Text style={[styles.detailText, { textAlign: isRTL ? 'right' : 'left' }]}>
-          {t("child_activity_card_pending_purchases")} {child.pendingPurchases}
+          {t("child_activity_card_pending_purchases" as TranslationKeys)} {child.pendingPurchases}
         </Text>
       </View>
 
@@ -68,7 +69,7 @@ export function ChildActivityCard({ child }: ChildActivityCardProps) {
         ]}
       >
         <Text style={styles.detailsButtonText}>
-          {t("child_activity_card_view_details")}
+          {t("child_activity_card_view_details" as TranslationKeys)}
         </Text>
       </TouchableOpacity>
     </View>
@@ -115,4 +116,3 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-

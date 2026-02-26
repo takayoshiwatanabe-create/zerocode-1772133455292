@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, TouchableOpacity, Modal, StyleSheet, Platform, ActivityIndicator } from "react-native";
 import { t } from "@/i18n";
 import { getIsRTL } from "@/i18n";
+import { TranslationKeys } from "@/i18n/translations";
 
 interface PurchaseItem {
   id: string;
@@ -38,7 +39,7 @@ export function PurchaseApprovalModal({
 
   const formatTimestamp = (isoString: string) => {
     const date = new Date(isoString);
-    return date.toLocaleDateString(t("locale_code"), {
+    return date.toLocaleDateString(t("locale_code" as TranslationKeys), {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
@@ -57,29 +58,29 @@ export function PurchaseApprovalModal({
       <View style={styles.centeredView}>
         <View style={[styles.modalView, { alignItems: isRTL ? 'flex-end' : 'flex-start' }]}>
           <Text style={[styles.modalTitle, { textAlign: isRTL ? 'right' : 'left' }]}>
-            {t("purchase_approval_modal_title")}
+            {t("purchase_approval_modal_title" as TranslationKeys)}
           </Text>
 
           <View style={[styles.detailRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-            <Text style={styles.detailLabel}>{t("purchase_approval_modal_child_name")}</Text>
+            <Text style={styles.detailLabel}>{t("purchase_approval_modal_child_name" as TranslationKeys)}</Text>
             <Text style={[styles.detailValue, { textAlign: isRTL ? 'left' : 'right' }]}>{purchase.childNickname}</Text>
           </View>
           <View style={[styles.detailRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-            <Text style={styles.detailLabel}>{t("purchase_approval_modal_item_name")}</Text>
+            <Text style={styles.detailLabel}>{t("purchase_approval_modal_item_name" as TranslationKeys)}</Text>
             <Text style={[styles.detailValue, { textAlign: isRTL ? 'left' : 'right' }]}>{purchase.itemName}</Text>
           </View>
           <View style={[styles.detailRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-            <Text style={styles.detailLabel}>{t("purchase_approval_modal_item_description")}</Text>
+            <Text style={styles.detailLabel}>{t("purchase_approval_modal_item_description" as TranslationKeys)}</Text>
             <Text style={[styles.detailValue, { textAlign: isRTL ? 'left' : 'right' }]}>{purchase.itemDescription}</Text>
           </View>
           <View style={[styles.detailRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-            <Text style={styles.detailLabel}>{t("purchase_approval_modal_cost")}</Text>
+            <Text style={styles.detailLabel}>{t("purchase_approval_modal_cost" as TranslationKeys)}</Text>
             <Text style={[styles.detailValue, { textAlign: isRTL ? 'left' : 'right' }]}>
-              {purchase.cost} {purchase.currency === "points" ? t("points_unit") : t("real_money_unit")}
+              {purchase.cost} {purchase.currency === "points" ? t("points_unit" as TranslationKeys) : t("real_money_unit" as TranslationKeys)}
             </Text>
           </View>
           <View style={[styles.detailRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-            <Text style={styles.detailLabel}>{t("purchase_approval_modal_timestamp")}</Text>
+            <Text style={styles.detailLabel}>{t("purchase_approval_modal_timestamp" as TranslationKeys)}</Text>
             <Text style={[styles.detailValue, { textAlign: isRTL ? 'left' : 'right' }]}>{formatTimestamp(purchase.timestamp)}</Text>
           </View>
 
@@ -89,14 +90,14 @@ export function PurchaseApprovalModal({
               onPress={() => onApprove(purchase.id)}
               disabled={isLoading}
             >
-              {isLoading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>{t("purchase_approval_modal_approve_button")}</Text>}
+              {isLoading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>{t("purchase_approval_modal_approve_button" as TranslationKeys)}</Text>}
             </TouchableOpacity>
             <TouchableOpacity
               style={[styles.button, styles.rejectButton, isLoading && styles.buttonDisabled]}
               onPress={() => onReject(purchase.id)}
               disabled={isLoading}
             >
-              {isLoading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>{t("purchase_approval_modal_reject_button")}</Text>}
+              {isLoading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>{t("purchase_approval_modal_reject_button" as TranslationKeys)}</Text>}
             </TouchableOpacity>
           </View>
 
@@ -105,7 +106,7 @@ export function PurchaseApprovalModal({
             onPress={onClose}
             disabled={isLoading}
           >
-            {isLoading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>{t("purchase_approval_modal_close_button")}</Text>}
+            {isLoading ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>{t("purchase_approval_modal_close_button" as TranslationKeys)}</Text>}
           </TouchableOpacity>
         </View>
       </View>
@@ -196,4 +197,3 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
 });
-

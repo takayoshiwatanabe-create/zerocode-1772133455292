@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, createContext, useContext, ReactNode } from "react";
 import { UserProfile } from "@/types";
 import { t } from "@/i18n";
 import { Platform } from "react-native";
@@ -89,6 +89,10 @@ interface AuthState {
   isLoading: boolean;
   error: string | null;
   mfaRequired: boolean;
+  login: (email: string, password: string) => Promise<void>;
+  signup: (email: string, password: string) => Promise<void>;
+  verifyMfa: (email: string, code: string) => Promise<void>;
+  logout: () => Promise<void>;
 }
 
 const initialState: AuthState = {
@@ -98,13 +102,20 @@ const initialState: AuthState = {
   isLoading: false,
   error: null,
   mfaRequired: false,
+  login: async () => {}, // Placeholder
+  signup: async () => {}, // Placeholder
+  verifyMfa: async () => {}, // Placeholder
+  logout: async () => {}, // Placeholder
 };
 
-export function useAuth() {
-  const [state, setState] = useState<AuthState>(initialState);
+const AuthContext = createContext<AuthState>(initialState);
+
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [state, setState] = useState<Omit<AuthState, 'login' | 'signup' | 'verifyMfa' | 'logout'>>(initialState);
 
   useEffect(() => {
     const loadAuthState = async () => {
+      setState((prevState) => ({ ...prevState, isLoading: true }));
       try {
         let storedToken: string | null = null;
         let storedUser: string | null = null;
@@ -124,7 +135,10 @@ export function useAuth() {
             isAuthenticated: true,
             user,
             token: storedToken,
+            isLoading: false,
           }));
+        } else {
+          setState((prevState) => ({ ...prevState, isLoading: false }));
         }
       } catch (e) {
         console.error("Failed to load auth state from storage", e);
@@ -135,6 +149,7 @@ export function useAuth() {
           await AsyncStorage.removeItem("authToken");
           await AsyncStorage.removeItem("authUser");
         }
+        setState((prevState) => ({ ...prevState, isLoading: false }));
       }
     };
     loadAuthState();
@@ -249,11 +264,21 @@ export function useAuth() {
     }
   }, []);
 
-  return {
+  const authContextValue = {
     ...state,
     login,
     signup,
     verifyMfa,
     logout,
   };
+
+  return (
+    <AuthContext.Provider value={authContextValue}>
+      {children}
+    </AuthContext.Provider>
+  );
+}
+
+export function useAuth() {
+  return useContext(AuthContext);
 }

@@ -58,7 +58,7 @@ export function SafeChatPanel({
                   {t(msg.phraseKey as TranslationKeys)}
                 </Text>
                 <Text style={styles.timestampText}>
-                  {new Date(msg.timestamp).toLocaleTimeString(t("locale_code"), { hour: '2-digit', minute: '2-digit' })}
+                  {new Date(msg.timestamp).toLocaleTimeString(t("locale_code" as TranslationKeys), { hour: '2-digit', minute: '2-digit' })}
                 </Text>
               </View>
             );

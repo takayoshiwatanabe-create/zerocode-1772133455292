@@ -29,4 +29,3 @@ export default function ParentLayout() {
       {/* Add other parent-specific screens here */}
     </Stack>  );
 }
-

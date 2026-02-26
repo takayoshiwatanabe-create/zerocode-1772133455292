@@ -5,6 +5,7 @@ import { I18nManager, Platform } from "react-native";
 import { getIsRTL, getLang } from "@/i18n";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { StatusBar } from "expo-status-bar";
+import { AuthProvider } from "@/hooks/useAuth"; // Import AuthProvider
 
 export default function RootLayout() {
   const lang = getLang();
@@ -26,17 +27,18 @@ export default function RootLayout() {
 
   return (
     <I18nProvider>
-      <SafeAreaProvider>
-        <Stack>
-          <Stack.Screen name="index" options={{ headerShown: false }} />
-          <Stack.Screen name="(parent)" options={{ headerShown: false }} />
-          <Stack.Screen name="(game)" options={{ headerShown: false }} />
-          {/* Add other screens here */}
-        </Stack>
-        <StatusBar style="auto" />
-      </SafeAreaProvider>
+      <AuthProvider> {/* Wrap with AuthProvider */}
+        <SafeAreaProvider>
+          <Stack>
+            <Stack.Screen name="index" options={{ headerShown: false }} />
+            <Stack.Screen name="page" options={{ headerShown: false }} /> {/* Add page.tsx for web root */}
+            <Stack.Screen name="(parent)" options={{ headerShown: false }} />
+            <Stack.Screen name="(game)" options={{ headerShown: false }} />
+            {/* Add other screens here */}
+          </Stack>
+          <StatusBar style="auto" />
+        </SafeAreaProvider>
+      </AuthProvider>
     </I18nProvider>
   );
 }
-
-

@@ -6,6 +6,7 @@ import { ChildActivityCard } from "@/components/parent/ChildActivityCard";
 import React, { useState } from "react";
 import { PurchaseApprovalModal } from "@/components/parent/PurchaseApprovalModal";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { TranslationKeys } from "@/i18n/translations";
 
 export default function ParentDashboard() {
   const { isAuthenticated, user, isLoading } = useAuth();
@@ -29,7 +30,7 @@ export default function ParentDashboard() {
     return (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 24 }}>
         <Text style={{ fontSize: 20, fontWeight: 'bold', color: '#ef4444', textAlign: 'center' }}>
-          {t("parent_dashboard_unauthorized")}
+          {t("parent_dashboard_unauthorized" as TranslationKeys)}
         </Text>
       </View>
     );
@@ -118,7 +119,7 @@ export default function ParentDashboard() {
             width: '100%',
           }}
         >
-          {t("parent_dashboard_children_overview")}
+          {t("parent_dashboard_children_overview" as TranslationKeys)}
         </Text>
 
         <View style={{ width: '100%', rowGap: 24 }}> {/* space-y-6 */}
@@ -138,7 +139,7 @@ export default function ParentDashboard() {
             width: '100%',
           }}
         >
-          {t("parent_dashboard_pending_approvals")}
+          {t("parent_dashboard_pending_approvals" as TranslationKeys)}
         </Text>
         <View style={{
           width: '100%',
@@ -170,7 +171,7 @@ export default function ParentDashboard() {
                       {purchase.childNickname}: {purchase.itemName}
                     </Text>
                     <Text style={{ fontSize: 14, color: '#4b5563', textAlign: isRTL ? 'right' : 'left' }}>
-                      {t("purchase_approval_modal_cost")} {purchase.cost} {purchase.currency === "points" ? t("points_unit") : t("real_money_unit")}
+                      {t("purchase_approval_modal_cost" as TranslationKeys)} {purchase.cost} {purchase.currency === "points" ? t("points_unit" as TranslationKeys) : t("real_money_unit" as TranslationKeys)}
                     </Text>
                   </View>
                   <TouchableOpacity
@@ -185,7 +186,7 @@ export default function ParentDashboard() {
                     }}
                   >
                     <Text style={{ color: '#fff', fontWeight: 'bold', fontSize: 14 }}>
-                      {t("child_activity_card_view_details")}
+                      {t("child_activity_card_view_details" as TranslationKeys)}
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -193,7 +194,7 @@ export default function ParentDashboard() {
             </View>
           ) : (
             <Text style={{ color: '#4b5563', textAlign: isRTL ? 'right' : 'left' }}>
-              {t("parent_dashboard_no_pending_approvals")}
+              {t("parent_dashboard_no_pending_approvals" as TranslationKeys)}
             </Text>
           )}
         </View>
@@ -213,4 +214,3 @@ export default function ParentDashboard() {
     </SafeAreaView>
   );
 }
-

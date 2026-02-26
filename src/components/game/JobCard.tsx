@@ -33,11 +33,11 @@ export function JobCard({
       </Text>
       <View style={[styles.infoRow, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
         <Text style={styles.requiredLevel}>
-          {t("job_card_required_level", { level: requiredLevel })}
+          {t("job_card_required_level" as TranslationKeys, { level: requiredLevel })}
         </Text>
         {!isUnlocked && (
           <Text style={styles.lockedText}>
-            {t("job_card_locked")}
+            {t("job_card_locked" as TranslationKeys)}
           </Text>
         )}
       </View>
@@ -47,7 +47,7 @@ export function JobCard({
         disabled={!isUnlocked}
       >
         <Text style={styles.buttonText}>
-          {isUnlocked ? t("job_card_start_button") : t("job_card_unlock_more")}
+          {isUnlocked ? t("job_card_start_button" as TranslationKeys) : t("job_card_unlock_more" as TranslationKeys)}
         </Text>
       </TouchableOpacity>
     </View>
@@ -111,4 +111,3 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-

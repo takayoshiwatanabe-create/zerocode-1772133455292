@@ -62,7 +62,8 @@ export default function MinigameScreen() {
           {t("minigame_title", { minigameName: t(`job_${id}_title` as TranslationKeys) })}
         </Text>
 
-        {isLoadingGame && (
+        {/* Only show game loading overlay if gameResult is null (i.e., game is active) */}
+        {isLoadingGame && !gameResult && (
           <View style={styles.gameLoadingOverlay}>
             <ActivityIndicator size="large" color="#2563eb" />
             <Text style={styles.loadingText}>{t("minigame_loading_game" as TranslationKeys)}</Text>
@@ -78,7 +79,7 @@ export default function MinigameScreen() {
             isRTL={isRTL}
           />
         ) : (
-          <View style={styles.gameResultContainer}>
+          <View style={[styles.gameResultContainer, { alignItems: isRTL ? 'flex-end' : 'flex-start' }]}>
             <Text style={[styles.resultTitle, { textAlign: isRTL ? 'right' : 'left' }]}>
               {t("minigame_result_title" as TranslationKeys)}
             </Text>
@@ -179,3 +180,4 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
 });
+

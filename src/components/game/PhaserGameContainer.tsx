@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
-import { View, Platform, StyleSheet, Text } from 'react-native'; // Import Text for native placeholder
+import { View, Platform, StyleSheet, Text } from 'react-native';
 import Phaser from 'phaser';
 import { JobScene } from '@/game/scenes/JobScene';
 import { t } from '@/i18n';
@@ -43,8 +43,15 @@ export function PhaserGameContainer({
       return;
     }
 
-    if (isGameInitialized) {
+    // Only initialize if not already initialized and ref is available
+    if (isGameInitialized && gameRef.current) {
       console.log('Game already initialized, skipping.');
+      return;
+    }
+
+    // Ensure the container is available before initializing Phaser
+    if (!gameContainerRef.current) {
+      console.warn('Game container ref not available, deferring Phaser initialization.');
       return;
     }
 
@@ -54,7 +61,7 @@ export function PhaserGameContainer({
       type: Phaser.AUTO,
       width: 800,
       height: 600,
-      parent: gameContainerRef.current || 'game-container', // Use ref for web, or fallback to ID
+      parent: gameContainerRef.current, // Use ref for web
       backgroundColor: '#33aaff',
       physics: {
         default: 'arcade',
@@ -93,7 +100,7 @@ export function PhaserGameContainer({
     return () => {
       destroyGame();
     };
-  }, [minigameId, onGameReady, onGameComplete, isRTL, isGameInitialized, destroyGame]);
+  }, [minigameId, onGameReady, onGameComplete, isRTL, isGameInitialized, destroyGame, gameContainerRef.current]); // Add gameContainerRef.current to dependencies
 
   // For web, render a div that Phaser can attach to
   if (Platform.OS === 'web') {

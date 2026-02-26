@@ -1,93 +1,13 @@
-import { useState, useEffect, useCallback, createContext, useContext, ReactNode } from "react";
-import { UserProfile } from "@/types";
+import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { t } from "@/i18n";
-import { Platform } from "react-native";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Id, User } from "@/types";
 import { TranslationKeys } from "@/i18n/translations";
 
-// Extend UserProfile to include MFA status
-interface AuthUserProfile extends UserProfile {
-  mfaEnabled: boolean;
-}
-
-// Mock API calls
-const mockApi = {
-  login: async (email: string, password: string): Promise<{ user: AuthUserProfile; token: string; mfaRequired?: boolean }> => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (email === "parent@example.com" && password === "Password123!") {
-          // Simulate MFA required for this user
-          resolve({
-            user: { id: "parent-1", nickname: "ParentUser", language: "en", mfaEnabled: true },
-            token: "mock-token-parent",
-            mfaRequired: true,
-          });
-        } else if (email === "admin@example.com" && password === "AdminPass!") {
-          resolve({
-            user: { id: "admin-1", nickname: "AdminUser", language: "ja", mfaEnabled: false },
-            token: "mock-token-admin",
-            mfaRequired: false,
-          });
-        } else if (email === "child@example.com" && password === "ChildPass123!") {
-          resolve({
-            user: { id: "child-1", nickname: "GamePlayer", language: "en", mfaEnabled: false },
-            token: "mock-token-child",
-            mfaRequired: false,
-          });
-        }
-        else {
-          reject(new Error(t("auth_error_invalid_credentials" as TranslationKeys)));
-        }
-      }, 1000);
-    });
-  },
-
-  signup: async (email: string, password: string): Promise<{ user: AuthUserProfile; token: string }> => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (email === "existing@example.com") {
-          reject(new Error(t("auth_error_email_exists" as TranslationKeys)));
-        } else {
-          resolve({
-            user: { id: `user-${Date.now()}`, nickname: `NewUser${Date.now()}`, language: "en", mfaEnabled: false },
-            token: `mock-token-newuser-${Date.now()}`,
-          });
-        }
-      }, 1000);
-    });
-  },
-
-  verifyMfa: async (email: string, code: string): Promise<{ user: AuthUserProfile; token: string }> => {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (email === "parent@example.com" && code === "123456") {
-          resolve({
-            user: { id: "parent-1", nickname: "ParentUser", language: "en", mfaEnabled: true },
-            token: "mock-token-parent-mfa-verified",
-          });
-        } else {
-          reject(new Error(t("mfa_error_invalid_code" as TranslationKeys)));
-        }
-      }, 1000);
-    });
-  },
-
-  logout: async (): Promise<void> => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve();
-      }, 500);
-    });
-  },
-};
-
-
-interface AuthState {
+interface AuthContextType {
   isAuthenticated: boolean;
-  user: AuthUserProfile | null;
-  token: string | null;
+  user: User | null;
   isLoading: boolean;
-  error: string | null;
   mfaRequired: boolean;
   login: (email: string, password: string) => Promise<void>;
   signup: (email: string, password: string) => Promise<void>;
@@ -95,192 +15,174 @@ interface AuthState {
   logout: () => Promise<void>;
 }
 
-const initialState: AuthState = {
-  isAuthenticated: false,
-  user: null,
-  token: null,
-  isLoading: false,
-  error: null,
-  mfaRequired: false,
-  login: async () => { /* no-op */ }, // Placeholder
-  signup: async () => { /* no-op */ }, // Placeholder
-  verifyMfa: async () => { /* no-op */ }, // Placeholder
-  logout: async () => { /* no-op */ }, // Placeholder
-};
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const AuthContext = createContext<AuthState>(initialState);
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [mfaRequired, setMfaRequired] = useState(false);
+  const [pendingMfaEmail, setPendingMfaEmail] = useState<string | null>(null);
 
-export function AuthProvider({ children }: { children: ReactNode }) {
-  const [state, setState] = useState<Omit<AuthState, 'login' | 'signup' | 'verifyMfa' | 'logout'>>(initialState);
-
-  useEffect(() => {
-    const loadAuthState = async () => {
-      setState((prevState) => ({ ...prevState, isLoading: true }));
-      try {
-        let storedToken: string | null = null;
-        let storedUser: string | null = null;
-
-        if (Platform.OS === 'web' && typeof window !== 'undefined' && window.localStorage) {
-          storedToken = localStorage.getItem("authToken");
-          storedUser = localStorage.getItem("authUser");
-        } else if (Platform.OS !== 'web') { // For React Native
-          storedToken = await AsyncStorage.getItem("authToken");
-          storedUser = await AsyncStorage.getItem("authUser");
-        }
-
-        if (storedToken && storedUser) {
-          const user = JSON.parse(storedUser) as AuthUserProfile;
-          setState((prevState) => ({
-            ...prevState,
-            isAuthenticated: true,
-            user,
-            token: storedToken,
-            isLoading: false,
-          }));
-        } else {
-          setState((prevState) => ({ ...prevState, isLoading: false }));
-        }
-      } catch (e) {
-        console.error("Failed to load auth state from storage", e);
-        if (Platform.OS === 'web' && typeof window !== 'undefined' && window.localStorage) {
-          localStorage.removeItem("authToken");
-          localStorage.removeItem("authUser");
-        } else if (Platform.OS !== 'web') {
-          await AsyncStorage.removeItem("authToken");
-          await AsyncStorage.removeItem("authUser");
-        }
-        setState((prevState) => ({ ...prevState, isLoading: false }));
+  const loadUser = useCallback(async () => {
+    try {
+      const storedUser = await AsyncStorage.getItem("user");
+      if (storedUser) {
+        const parsedUser: User = JSON.parse(storedUser);
+        setUser(parsedUser);
+        setIsAuthenticated(true);
       }
-    };
-    loadAuthState();
+    } catch (error) {
+      console.error("Failed to load user from storage:", error);
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
 
+  useEffect(() => {
+    loadUser();
+  }, [loadUser]);
+
   const login = useCallback(async (email: string, password: string) => {
-    setState((prevState) => ({ ...prevState, isLoading: true, error: null, mfaRequired: false }));
+    setIsLoading(true);
+    setMfaRequired(false);
+    setPendingMfaEmail(null);
     try {
-      const { user, token, mfaRequired } = await mockApi.login(email, password);
-      if (mfaRequired) {
-        setState((prevState) => ({
-          ...prevState,
-          isLoading: false,
-          user,
-          mfaRequired: true,
-          error: null,
-        }));
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // Mock authentication logic
+      if (email === "parent@example.com" && password === "password123") {
+        // RULE-TECH-002: MFA for parent accounts
+        setMfaRequired(true);
+        setPendingMfaEmail(email);
+        throw new Error(t("mfa_required_error" as TranslationKeys)); // Indicate MFA is needed
+      } else if (email === "child@example.com" && password === "password123") {
+        const mockUser: User = {
+          id: "child-1",
+          nickname: "GameKid",
+          email: email,
+          role: "child",
+        };
+        await AsyncStorage.setItem("user", JSON.stringify(mockUser));
+        setUser(mockUser);
+        setIsAuthenticated(true);
+        setMfaRequired(false);
+      } else if (email === "admin@example.com" && password === "adminpass") {
+        // Mock admin user for parent dashboard access
+        setMfaRequired(true);
+        setPendingMfaEmail(email);
+        throw new Error(t("mfa_required_error" as TranslationKeys));
       } else {
-        if (Platform.OS === 'web' && typeof window !== 'undefined' && window.localStorage) {
-          localStorage.setItem("authToken", token);
-          localStorage.setItem("authUser", JSON.stringify(user));
-        } else if (Platform.OS !== 'web') {
-          await AsyncStorage.setItem("authToken", token);
-          await AsyncStorage.setItem("authUser", JSON.stringify(user));
-        }
-        setState((prevState) => ({
-          ...prevState,
-          isAuthenticated: true,
-          user,
-          token,
-          isLoading: false,
-          mfaRequired: false,
-        }));
+        throw new Error(t("login_error_invalid_credentials" as TranslationKeys));
       }
-    } catch (err: any) {
-      setState((prevState) => ({
-        ...prevState,
-        error: err.message,
-        isLoading: false,
-        mfaRequired: false,
-      }));
-      throw err;
+    } finally {
+      setIsLoading(false);
     }
   }, []);
 
   const signup = useCallback(async (email: string, password: string) => {
-    setState((prevState) => ({ ...prevState, isLoading: true, error: null }));
+    setIsLoading(true);
     try {
-      // The signup mock API returns { user, token } but we don't need to store token here
-      // as the user is expected to log in after signup.
-      await mockApi.signup(email, password);
-      setState((prevState) => ({
-        ...prevState,
-        isLoading: false,
-        error: null,
-      }));
-    } catch (err: any) {
-      setState((prevState) => ({
-        ...prevState,
-        error: err.message,
-        isLoading: false,
-      }));
-      throw err;
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // Mock signup logic (e.g., check if email already exists)
+      if (email === "child@example.com" || email === "parent@example.com" || email === "admin@example.com") {
+        throw new Error(t("signup_error_email_exists" as TranslationKeys));
+      }
+
+      // RULE-SAFETY-001: Nickname registration only, no free text chat
+      // For signup, we'll use a generic nickname or prompt for one later.
+      // Here, we'll just use part of the email as a mock nickname.
+      const nickname = email.split('@')[0];
+      const mockUser: User = {
+        id: `user-${Date.now()}`,
+        nickname: nickname,
+        email: email,
+        role: "child", // Default to child role for new signups
+      };
+      // In a real app, this would create the user on the backend.
+      // We don't auto-login after signup, but redirect to login.
+      console.log("User signed up:", mockUser);
+    } finally {
+      setIsLoading(false);
     }
   }, []);
 
   const verifyMfa = useCallback(async (email: string, code: string) => {
-    setState((prevState) => ({ ...prevState, isLoading: true, error: null }));
+    setIsLoading(true);
     try {
-      const { user, token } = await mockApi.verifyMfa(email, code);
-      if (Platform.OS === 'web' && typeof window !== 'undefined' && window.localStorage) {
-        localStorage.setItem("authToken", token);
-        localStorage.setItem("authUser", JSON.stringify(user));
-      } else if (Platform.OS !== 'web') {
-        await AsyncStorage.setItem("authToken", token);
-        await AsyncStorage.setItem("authUser", JSON.stringify(user));
+      // Simulate MFA verification
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      if (pendingMfaEmail === email && code === "123456") { // Mock MFA code
+        let authenticatedUser: User;
+        if (email === "parent@example.com") {
+          authenticatedUser = {
+            id: "parent-1",
+            nickname: "ParentUser",
+            email: email,
+            role: "parent",
+          };
+        } else if (email === "admin@example.com") {
+          authenticatedUser = {
+            id: "admin-1",
+            nickname: "AdminUser",
+            email: email,
+            role: "admin",
+          };
+        } else {
+          throw new Error(t("mfa_error_invalid_email" as TranslationKeys));
+        }
+
+        await AsyncStorage.setItem("user", JSON.stringify(authenticatedUser));
+        setUser(authenticatedUser);
+        setIsAuthenticated(true);
+        setMfaRequired(false);
+        setPendingMfaEmail(null);
+      } else {
+        throw new Error(t("mfa_error_invalid_code" as TranslationKeys));
       }
-      setState((prevState) => ({
-        ...prevState,
-        isAuthenticated: true,
-        user,
-        token,
-        isLoading: false,
-        mfaRequired: false,
-      }));
-    } catch (err: any) {
-      setState((prevState) => ({
-        ...prevState,
-        error: err.message,
-        isLoading: false,
-      }));
-      throw err;
+    } finally {
+      setIsLoading(false);
     }
-  }, []);
+  }, [pendingMfaEmail]);
 
   const logout = useCallback(async () => {
-    setState((prevState) => ({ ...prevState, isLoading: true, error: null }));
+    setIsLoading(true);
     try {
-      await mockApi.logout();
-      if (Platform.OS === 'web' && typeof window !== 'undefined' && window.localStorage) {
-        localStorage.removeItem("authToken");
-        localStorage.removeItem("authUser");
-      } else if (Platform.OS !== 'web') {
-        await AsyncStorage.removeItem("authToken");
-        await AsyncStorage.removeItem("authUser");
-      }
-      setState(initialState);
-    } catch (err: any) {
-      setState((prevState) => ({
-        ...prevState,
-        error: err.message,
-        isLoading: false,
-      }));
+      await AsyncStorage.removeItem("user");
+      setUser(null);
+      setIsAuthenticated(false);
+      setMfaRequired(false);
+      setPendingMfaEmail(null);
+    } catch (error) {
+      console.error("Failed to clear user from storage:", error);
+    } finally {
+      setIsLoading(false);
     }
   }, []);
 
-  const authContextValue = {
-    ...state,
+  const value = {
+    isAuthenticated,
+    user,
+    isLoading,
+    mfaRequired,
     login,
     signup,
     verifyMfa,
     logout,
   };
 
-  return (
-    <AuthContext.Provider value={authContextValue}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {
-  return useContext(AuthContext);
+  const context = useContext(AuthContext);
+  if (context === undefined) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
 }
+

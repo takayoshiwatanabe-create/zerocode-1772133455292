@@ -29,7 +29,8 @@ export default function GameHome() {
 
   const handleSelectJob = (jobId: string) => {
     console.log("Selected job:", jobId);
-    // In a real app, this would trigger a job mini-game or quest
+    // Navigate to the minigame screen
+    router.push(`/(game)/minigame/${jobId}`);
   };
 
   const handleAdWatched = (pointsEarned: number) => {
@@ -73,7 +74,7 @@ export default function GameHome() {
         <AdViewer onAdWatched={handleAdWatched} />
 
         {/* Progressive Disclosure: Unlock new features based on playerLevel */}
-        {playerLevel >= 2 && (
+        {playerLevel >= 1 && ( // Changed to level 1 for initial job visibility
           <View style={styles.unlockedFeature}>
             <Text style={[styles.unlockedFeatureTitle, { textAlign: isRTL ? 'right' : 'left' }]}>
               {t("game_unlocked_jobs_title" as TranslationKeys)}

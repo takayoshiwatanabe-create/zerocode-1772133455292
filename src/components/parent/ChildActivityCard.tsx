@@ -40,7 +40,7 @@ export function ChildActivityCard({ child }: ChildActivityCardProps) {
       ]}
     >
       <View style={[styles.textContainer, { alignItems: isRTL ? 'flex-end' : 'flex-start' }]}>
-        <Text style={styles.nickname}>{child.nickname}</Text>
+        <Text style={[styles.nickname, { textAlign: isRTL ? 'right' : 'left' }]}>{child.nickname}</Text>
         <Text style={[styles.detailText, { textAlign: isRTL ? 'right' : 'left' }]}>
           {t("child_activity_card_last_active" as TranslationKeys)} {formatLastActive(child.lastActive)}
         </Text>
@@ -116,3 +116,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
+

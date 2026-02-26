@@ -96,15 +96,15 @@ export function WorldMap({ playerLevel, currentLocation, onLocationSelect }: Wor
       <View style={[styles.legendContainer, { alignItems: isRTL ? 'flex-end' : 'flex-start', [isRTL ? 'left' : 'right']: 10 }]}>
         <Text style={styles.legendTitle}>{t("game_map_legend_title" as TranslationKeys)}</Text>
         <View style={[styles.legendItem, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-          <View style={[styles.legendColorBox, { backgroundColor: '#fcd34d', marginLeft: isRTL ? 8 : 0, marginRight: isRTL ? 0 : 8 }]} />
+          <View style={[styles.legendColorBox, { marginLeft: isRTL ? 8 : 0, marginRight: isRTL ? 0 : 8, backgroundColor: '#fcd34d' }]} />
           <Text style={styles.legendText}>{t("game_map_legend_current_location" as TranslationKeys)}</Text>
         </View>
         <View style={[styles.legendItem, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-          <View style={[styles.legendColorBox, { backgroundColor: '#3b82f6', marginLeft: isRTL ? 8 : 0, marginRight: isRTL ? 0 : 8 }]} />
+          <View style={[styles.legendColorBox, { marginLeft: isRTL ? 8 : 0, marginRight: isRTL ? 0 : 8, backgroundColor: '#3b82f6' }]} />
           <Text style={styles.legendText}>{t("game_map_legend_unlocked_location" as TranslationKeys)}</Text>
         </View>
         <View style={[styles.legendItem, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
-          <View style={[styles.legendColorBox, { backgroundColor: '#9ca3af', marginLeft: isRTL ? 8 : 0, marginRight: isRTL ? 0 : 8 }]} />
+          <View style={[styles.legendColorBox, { marginLeft: isRTL ? 8 : 0, marginRight: isRTL ? 0 : 8, backgroundColor: '#9ca3af' }]} />
           <Text style={styles.legendText}>{t("game_map_legend_locked_location" as TranslationKeys)}</Text>
         </View>
       </View>
@@ -189,7 +189,6 @@ const styles = StyleSheet.create({
   legendContainer: {
     position: 'absolute',
     bottom: 10,
-    // [getIsRTL() ? 'left' : 'right']: 10, // Adjust position based on RTL - Removed this as it was causing issues on web
     right: 10, // Default to right, adjust in component if needed
     backgroundColor: 'rgba(255,255,255,0.8)',
     padding: 10,
@@ -215,11 +214,11 @@ const styles = StyleSheet.create({
     width: 16,
     height: 16,
     borderRadius: 4,
-    marginRight: 8,
-    // marginLeft: getIsRTL() ? 8 : 0, // Adjust margin for RTL - Removed this as it was causing issues on web
+    // Removed marginRight and marginLeft from here, handled in component
   },
   legendText: {
     fontSize: 12,
     color: '#374151',
   },
 });
+

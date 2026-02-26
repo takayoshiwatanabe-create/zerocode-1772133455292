@@ -57,7 +57,7 @@ export function SafeChatPanel({
                 <Text style={isMyMessage ? styles.myMessageText : styles.otherMessageText}>
                   {t(msg.phraseKey as TranslationKeys)}
                 </Text>
-                <Text style={styles.timestampText}>
+                <Text style={[styles.timestampText, { textAlign: isMyMessage ? 'right' : 'left' }]}>
                   {new Date(msg.timestamp).toLocaleTimeString(t("locale_code" as TranslationKeys), { hour: '2-digit', minute: '2-digit' })}
                 </Text>
               </View>
@@ -135,7 +135,6 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: '#cbd5e1', // text-slate-400
     marginTop: 4,
-    textAlign: 'right',
   },
   phraseButtonsContainer: {
     flexDirection: 'row',
@@ -158,3 +157,4 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+

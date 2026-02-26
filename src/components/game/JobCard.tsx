@@ -43,7 +43,7 @@ export function JobCard({
       </View>
       <TouchableOpacity
         onPress={() => onSelectJob(jobId)}
-        style={[styles.button, !isUnlocked && styles.buttonDisabled]}
+        style={[styles.button, !isUnlocked && styles.buttonDisabled, { alignSelf: isRTL ? 'flex-end' : 'flex-start' }]}
         disabled={!isUnlocked}
       >
         <Text style={styles.buttonText}>
@@ -83,6 +83,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 16,
+    width: '100%', // Ensure row takes full width for proper justification
   },
   requiredLevel: {
     fontSize: 14,
@@ -111,3 +112,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
+

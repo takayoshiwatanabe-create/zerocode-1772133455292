@@ -102,7 +102,10 @@ export default function GameHome() {
               />
               {/* Add more job cards as needed, with their respective required levels */}
             </View>
-            <TouchableOpacity style={[styles.featureButton, { alignSelf: isRTL ? 'flex-end' : 'flex-start' }]}>
+            <TouchableOpacity
+              onPress={() => router.push("/(game)/jobs")} // Navigate to a dedicated jobs screen if it exists
+              style={[styles.featureButton, { alignSelf: isRTL ? 'flex-end' : 'flex-start' }]}
+            >
               <Text style={styles.featureButtonText}>{t("game_view_jobs_button" as TranslationKeys)}</Text>
             </TouchableOpacity>
           </View>
@@ -116,7 +119,10 @@ export default function GameHome() {
             <Text style={[styles.unlockedFeatureText, { textAlign: isRTL ? 'right' : 'left' }]}>
               {t("game_unlocked_economy_description" as TranslationKeys)}
             </Text>
-            <TouchableOpacity style={[styles.featureButton, { alignSelf: isRTL ? 'flex-end' : 'flex-start' }]}>
+            <TouchableOpacity
+              onPress={() => router.push("/(game)/economy")} // Navigate to a dedicated economy screen
+              style={[styles.featureButton, { alignSelf: isRTL ? 'flex-end' : 'flex-start' }]}
+            >
               <Text style={styles.featureButtonText}>{t("game_view_economy_button" as TranslationKeys)}</Text>
             </TouchableOpacity>
           </View>

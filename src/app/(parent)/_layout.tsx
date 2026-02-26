@@ -26,6 +26,7 @@ export default function ParentLayout() {
   return (
     <Stack>
       <Stack.Screen name="dashboard" options={{ title: t("parent_dashboard_title_short"), headerShown: false }} />
-      {/* Add other parent-specific screens here */}
-    </Stack>  );
+      <Stack.Screen name="child-details/[id]" options={{ title: t("child_details_title"), headerShown: false }} />
+    </Stack>
+  );
 }

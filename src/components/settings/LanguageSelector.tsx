@@ -8,62 +8,48 @@ interface LanguageSelectorProps {
 }
 
 const supportedLanguages = [
-  { code: "ja", nameKey: "language_japanese" },
-  { code: "en", nameKey: "language_english" },
-  { code: "zh", nameKey: "language_chinese" },
-  { code: "ko", nameKey: "language_korean" },
-  { code: "es", nameKey: "language_spanish" },
-  { code: "fr", nameKey: "language_french" },
-  { code: "de", nameKey: "language_german" },
-  { code: "pt", nameKey: "language_portuguese" },
-  { code: "ar", nameKey: "language_arabic" },
-  { code: "hi", nameKey: "language_hindi" },
+  { code: "ja", name: "日本語" },
+  { code: "en", name: "English" },
+  { code: "zh", name: "中文" },
+  { code: "ko", name: "한국어" },
+  { code: "es", name: "Español" },
+  { code: "fr", name: "Français" },
+  { code: "de", name: "Deutsch" },
+  { code: "pt", name: "Português" },
+  { code: "ar", name: "العربية" },
+  { code: "hi", name: "हिन्दी" },
 ];
 
 export function LanguageSelector({ onLanguageChange }: LanguageSelectorProps) {
   const currentLang = getLang();
   const isRTL = getIsRTL();
-  const [isOpen, setIsOpen] = useState(false);
-
-  const handleSelectLanguage = (langCode: string) => {
-    onLanguageChange(langCode);
-    setIsOpen(false);
-  };
-
-  const currentLangName = supportedLanguages.find(
-    (lang) => lang.code === currentLang
-  )?.nameKey;
 
   return (
     <View style={[styles.container, { alignItems: isRTL ? 'flex-end' : 'flex-start' }]}>
-      <TouchableOpacity
-        style={[styles.dropdownHeader, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}
-        onPress={() => setIsOpen(!isOpen)}
-      >
-        <Text style={[styles.selectedLanguageText, { textAlign: isRTL ? 'right' : 'left' }]}>
-          {currentLangName ? t(currentLangName as TranslationKeys) : currentLang}
-        </Text>
-        <Text style={styles.dropdownArrow}>{isOpen ? '▲' : '▼'}</Text>
-      </TouchableOpacity>
-
-      {isOpen && (
-        <View style={[styles.dropdownList, { alignItems: isRTL ? 'flex-end' : 'flex-start' }]}>
-          {supportedLanguages.map((lang) => (
-            <TouchableOpacity
-              key={lang.code}
+      <Text style={[styles.label, { textAlign: isRTL ? 'right' : 'left' }]}>
+        {t("settings_current_language" as TranslationKeys, { language: supportedLanguages.find(l => l.code === currentLang)?.name || currentLang })}
+      </Text>
+      <View style={[styles.languageButtonsContainer, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
+        {supportedLanguages.map((lang) => (
+          <TouchableOpacity
+            key={lang.code}
+            style={[
+              styles.languageButton,
+              currentLang === lang.code && styles.selectedLanguageButton,
+            ]}
+            onPress={() => onLanguageChange(lang.code)}
+          >
+            <Text
               style={[
-                styles.dropdownItem,
-                currentLang === lang.code && styles.selectedItem,
+                styles.languageButtonText,
+                currentLang === lang.code && styles.selectedLanguageButtonText,
               ]}
-              onPress={() => handleSelectLanguage(lang.code)}
             >
-              <Text style={[styles.dropdownItemText, { textAlign: isRTL ? 'right' : 'left' }]}>
-                {t(lang.nameKey as TranslationKeys)}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      )}
+              {lang.name}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </View>
     </View>
   );
 }
@@ -73,51 +59,36 @@ const styles = StyleSheet.create({
     width: '100%',
     marginBottom: 16,
   },
-  dropdownHeader: {
-    backgroundColor: '#e2e8f0', // slate-200
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderRadius: 8,
+  label: {
+    fontSize: 16,
+    color: '#4b5563',
+    marginBottom: 12,
+  },
+  languageButtonsContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexWrap: 'wrap',
+    gap: 10, // Tailwind's gap-2.5
+    justifyContent: Platform.OS === 'web' ? 'flex-start' : 'center', // Adjust for web vs native
+  },
+  languageButton: {
+    backgroundColor: '#e0e7ff', // indigo-100
+    paddingVertical: 8,
+    paddingHorizontal: 15,
+    borderRadius: 20,
     borderWidth: 1,
-    borderColor: '#cbd5e1', // slate-300
+    borderColor: '#c7d2fe', // indigo-200
   },
-  selectedLanguageText: {
-    fontSize: 16,
-    color: '#1e293b', // slate-800
-    fontWeight: '600',
+  selectedLanguageButton: {
+    backgroundColor: '#4f46e5', // indigo-600
+    borderColor: '#4f46e5',
   },
-  dropdownArrow: {
-    fontSize: 12,
-    color: '#475569', // slate-600
+  languageButtonText: {
+    color: '#3730a3', // indigo-800
+    fontWeight: 'bold',
+    fontSize: 14,
   },
-  dropdownList: {
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#cbd5e1',
-    marginTop: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 3,
-    width: '100%',
-  },
-  dropdownItem: {
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#f1f5f9', // slate-100
-  },
-  selectedItem: {
-    backgroundColor: '#e0f2fe', // blue-50
-  },
-  dropdownItemText: {
-    fontSize: 16,
-    color: '#334155', // slate-700
+  selectedLanguageButtonText: {
+    color: '#fff',
   },
 });
 

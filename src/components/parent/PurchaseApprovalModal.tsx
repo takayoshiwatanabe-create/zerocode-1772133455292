@@ -1,7 +1,6 @@
 import React from "react";
 import { Modal, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Platform } from "react-native";
-import { t } from "@/i18n";
-import { getIsRTL } from "@/i18n";
+import { t, getIsRTL } from "@/i18n";
 import { TranslationKeys } from "@/i18n/translations";
 
 interface Purchase {
@@ -34,12 +33,12 @@ export function PurchaseApprovalModal({
   const isRTL = getIsRTL();
 
   if (!purchase) {
-    return null; // Don't render if no purchase is selected
+    return null;
   }
 
   const formatTimestamp = (isoString: string) => {
     const date = new Date(isoString);
-    return date.toLocaleString(t("locale_code" as TranslationKeys), {
+    return date.toLocaleDateString(t("locale_code" as TranslationKeys), {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
@@ -72,7 +71,7 @@ export function PurchaseApprovalModal({
 
           <View style={styles.detailRow}>
             <Text style={[styles.detailLabel, { textAlign: isRTL ? 'right' : 'left' }]}>
-              {t("purchase_approval_modal_item" as TranslationKeys)}
+              {t("purchase_approval_modal_item_name" as TranslationKeys)}
             </Text>
             <Text style={[styles.detailValue, { textAlign: isRTL ? 'right' : 'left' }]}>
               {purchase.itemName}
@@ -81,7 +80,7 @@ export function PurchaseApprovalModal({
 
           <View style={styles.detailRow}>
             <Text style={[styles.detailLabel, { textAlign: isRTL ? 'right' : 'left' }]}>
-              {t("purchase_approval_modal_description" as TranslationKeys)}
+              {t("purchase_approval_modal_item_description" as TranslationKeys)}
             </Text>
             <Text style={[styles.detailValue, { textAlign: isRTL ? 'right' : 'left' }]}>
               {purchase.itemDescription}
@@ -108,17 +107,6 @@ export function PurchaseApprovalModal({
 
           <View style={[styles.buttonContainer, { flexDirection: isRTL ? 'row-reverse' : 'row' }]}>
             <TouchableOpacity
-              style={[styles.button, styles.approveButton, isLoading && styles.buttonDisabled]}
-              onPress={() => onApprove(purchase.id)}
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <ActivityIndicator color="#fff" />
-              ) : (
-                <Text style={styles.buttonText}>{t("purchase_approval_modal_approve_button" as TranslationKeys)}</Text>
-              )}
-            </TouchableOpacity>
-            <TouchableOpacity
               style={[styles.button, styles.rejectButton, isLoading && styles.buttonDisabled]}
               onPress={() => onReject(purchase.id)}
               disabled={isLoading}
@@ -126,17 +114,34 @@ export function PurchaseApprovalModal({
               {isLoading ? (
                 <ActivityIndicator color="#fff" />
               ) : (
-                <Text style={styles.buttonText}>{t("purchase_approval_modal_reject_button" as TranslationKeys)}</Text>
+                <Text style={styles.buttonText}>
+                  {t("purchase_approval_modal_reject_button" as TranslationKeys)}
+                </Text>
+              )}
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.button, styles.approveButton, isLoading && styles.buttonDisabled]}
+              onPress={() => onApprove(purchase.id)}
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <ActivityIndicator color="#fff" />
+              ) : (
+                <Text style={styles.buttonText}>
+                  {t("purchase_approval_modal_approve_button" as TranslationKeys)}
+                </Text>
               )}
             </TouchableOpacity>
           </View>
 
           <TouchableOpacity
-            style={[styles.closeButton, { alignSelf: isRTL ? 'flex-end' : 'flex-start' }]}
+            style={[styles.closeButton, { alignSelf: isRTL ? 'flex-start' : 'flex-end' }]}
             onPress={onClose}
             disabled={isLoading}
           >
-            <Text style={styles.closeButtonText}>{t("purchase_approval_modal_close_button" as TranslationKeys)}</Text>
+            <Text style={styles.closeButtonText}>
+              {t("purchase_approval_modal_close_button" as TranslationKeys)}
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -164,14 +169,14 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 4,
     elevation: 5,
-    width: Platform.OS === 'web' ? '40%' : '90%', // Adjust width for web vs native
-    maxWidth: 600,
+    width: Platform.OS === 'web' ? '50%' : '90%', // Adjust width for web vs native
+    maxWidth: 500,
   },
   modalTitle: {
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: "bold",
-    color: "#1e40af",
     marginBottom: 20,
+    color: '#1e40af', // blue-800
     width: '100%',
   },
   detailRow: {
@@ -182,20 +187,20 @@ const styles = StyleSheet.create({
   },
   detailLabel: {
     fontSize: 16,
-    fontWeight: 'bold',
-    color: '#4b5563',
+    fontWeight: '600',
+    color: '#4b5563', // gray-700
     flex: 1,
   },
   detailValue: {
     fontSize: 16,
-    color: '#1f2937',
+    color: '#1f2937', // gray-900
     flex: 2,
   },
   buttonContainer: {
     marginTop: 30,
     width: '100%',
     justifyContent: 'space-around',
-    gap: 10, // Added gap for spacing between buttons
+    gap: 10, // Added gap
   },
   button: {
     flex: 1,
@@ -205,31 +210,29 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   approveButton: {
-    backgroundColor: "#22c55e", // green-500
+    backgroundColor: '#22c55e', // green-500
   },
   rejectButton: {
-    backgroundColor: "#ef4444", // red-500
+    backgroundColor: '#ef4444', // red-500
   },
   buttonDisabled: {
     opacity: 0.7,
   },
   buttonText: {
-    color: "white",
-    fontWeight: "bold",
+    color: '#fff',
+    fontWeight: 'bold',
     fontSize: 16,
   },
   closeButton: {
     marginTop: 20,
-    backgroundColor: "#6b7280", // gray-500
-    borderRadius: 8,
     paddingVertical: 10,
     paddingHorizontal: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
+    borderRadius: 8,
+    backgroundColor: '#6b7280', // gray-500
   },
   closeButtonText: {
-    color: "white",
-    fontWeight: "bold",
+    color: '#fff',
+    fontWeight: 'bold',
     fontSize: 16,
   },
 });

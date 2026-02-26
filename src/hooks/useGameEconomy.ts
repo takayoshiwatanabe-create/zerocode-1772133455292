@@ -8,48 +8,55 @@ interface GameEconomyContextType {
   adsWatchedToday: number;
   canWatchAd: boolean;
   isLoading: boolean;
+  error: string | null;
   updatePlayerPoints: (amount: number) => void;
   watchAd: () => Promise<number>;
-  // Add other economy-related functions (e.g., buyItem, sellStock)
 }
 
 const GameEconomyContext = createContext<GameEconomyContextType | undefined>(undefined);
 
-const POINTS_STORAGE_KEY = "game_player_points";
-const ADS_WATCHED_TODAY_KEY = "game_ads_watched_today";
-const LAST_AD_RESET_DATE_KEY = "game_last_ad_reset_date";
-const MAX_ADS_PER_DAY = 10; // RULE-ECON-002: 10 ads per day limit
+const MAX_ADS_PER_DAY = 10; // RULE-ECON-002: 10 ads per day
 
 export function GameEconomyProvider({ children }: { children: React.ReactNode }) {
-  const [playerPoints, setPlayerPoints] = useState(0);
-  const [adsWatchedToday, setAdsWatchedToday] = useState(0);
-  const [lastAdResetDate, setLastAdResetDate] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [playerPoints, setPlayerPoints] = useState<number>(0);
+  const [adsWatchedToday, setAdsWatchedToday] = useState<number>(0);
+  const [canWatchAd, setCanWatchAd] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   const loadEconomyData = useCallback(async () => {
     setIsLoading(true);
+    setError(null);
     try {
-      const storedPoints = await AsyncStorage.getItem(POINTS_STORAGE_KEY);
-      const storedAdsWatched = await AsyncStorage.getItem(ADS_WATCHED_TODAY_KEY);
-      const storedLastReset = await AsyncStorage.getItem(LAST_AD_RESET_DATE_KEY);
-
-      const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
-
-      let currentAdsWatched = 0;
-      if (storedLastReset === today) {
-        currentAdsWatched = storedAdsWatched ? parseInt(storedAdsWatched, 10) : 0;
-      } else {
-        // Reset ads watched if it's a new day
-        await AsyncStorage.setItem(ADS_WATCHED_TODAY_KEY, "0");
-        await AsyncStorage.setItem(LAST_AD_RESET_DATE_KEY, today);
-        currentAdsWatched = 0;
+      const storedPoints = await AsyncStorage.getItem("playerPoints");
+      if (storedPoints) {
+        setPlayerPoints(parseInt(storedPoints, 10));
       }
 
-      setPlayerPoints(storedPoints ? parseInt(storedPoints, 10) : 0);
-      setAdsWatchedToday(currentAdsWatched);
-      setLastAdResetDate(today);
-    } catch (error) {
-      console.error("Failed to load game economy data:", error);
+      const storedAdsData = await AsyncStorage.getItem("adsWatchedToday");
+      if (storedAdsData) {
+        const { count, date } = JSON.parse(storedAdsData);
+        const today = new Date().toDateString();
+
+        if (date === today) {
+          setAdsWatchedToday(count);
+          setCanWatchAd(count < MAX_ADS_PER_DAY);
+        } else {
+          // Reset for a new day
+          setAdsWatchedToday(0);
+          setCanWatchAd(true);
+          await AsyncStorage.setItem("adsWatchedToday", JSON.stringify({ count: 0, date: today }));
+        }
+      } else {
+        // Initialize if no data
+        const today = new Date().toDateString();
+        await AsyncStorage.setItem("adsWatchedToday", JSON.stringify({ count: 0, date: today }));
+        setAdsWatchedToday(0);
+        setCanWatchAd(true);
+      }
+    } catch (e) {
+      console.error("Failed to load game economy data", e);
+      setError(t("economy_error_load_data" as TranslationKeys));
     } finally {
       setIsLoading(false);
     }
@@ -61,45 +68,61 @@ export function GameEconomyProvider({ children }: { children: React.ReactNode })
 
   const updatePlayerPoints = useCallback(async (amount: number) => {
     // RULE-TECH-003: Game points calculation is server-side.
-    // For this mock, we simulate client-side update but log a warning.
-    console.warn("Client-side point update for mock. In production, this should be server-side (RULE-TECH-003).");
-    setPlayerPoints((prevPoints) => {
-      const newPoints = Math.max(0, prevPoints + amount);
-      AsyncStorage.setItem(POINTS_STORAGE_KEY, String(newPoints));
+    // For this client-side mock, we directly update.
+    // In a real app, this would be an API call.
+    setPlayerPoints((prev) => {
+      const newPoints = prev + amount;
+      AsyncStorage.setItem("playerPoints", newPoints.toString());
       return newPoints;
     });
   }, []);
 
   const watchAd = useCallback(async (): Promise<number> => {
-    if (adsWatchedToday >= MAX_ADS_PER_DAY) {
-      throw new Error(t("ad_viewer_error_max_ads" as TranslationKeys));
+    setIsLoading(true);
+    setError(null);
+    try {
+      if (!canWatchAd) {
+        throw new Error(t("ad_viewer_no_ads_available" as TranslationKeys));
+      }
+
+      // Simulate server-side ad watch and point calculation
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate network delay
+      const pointsEarned = Math.floor(Math.random() * 50) + 10; // Earn 10-60 points
+
+      // Update ads watched count
+      setAdsWatchedToday((prev) => {
+        const newCount = prev + 1;
+        const today = new Date().toDateString();
+        AsyncStorage.setItem("adsWatchedToday", JSON.stringify({ count: newCount, date: today }));
+        setCanWatchAd(newCount < MAX_ADS_PER_DAY);
+        return newCount;
+      });
+
+      updatePlayerPoints(pointsEarned);
+      return pointsEarned;
+    } catch (e: any) {
+      setError(e.message || t("ad_viewer_error_generic" as TranslationKeys));
+      throw e; // Re-throw to allow component to handle
+    } finally {
+      setIsLoading(false);
     }
+  }, [canWatchAd, updatePlayerPoints]);
 
-    // Simulate server-side ad watch and point reward
-    // RULE-ECON-002: Ad viewing = points is explicit.
-    const pointsEarned = Math.floor(Math.random() * 50) + 50; // Earn 50-100 points
-
-    // Update client-side state and storage
-    const newAdsWatched = adsWatchedToday + 1;
-    setAdsWatchedToday(newAdsWatched);
-    await AsyncStorage.setItem(ADS_WATCHED_TODAY_KEY, String(newAdsWatched));
-
-    updatePlayerPoints(pointsEarned); // Update points
-    return pointsEarned;
-  }, [adsWatchedToday, updatePlayerPoints]);
-
-  const canWatchAd = adsWatchedToday < MAX_ADS_PER_DAY;
-
-  const value = {
-    playerPoints,
-    adsWatchedToday,
-    canWatchAd,
-    isLoading,
-    updatePlayerPoints,
-    watchAd,
-  };
-
-  return <GameEconomyContext.Provider value={value}>{children}</GameEconomyContext.Provider>;
+  return (
+    <GameEconomyContext.Provider
+      value={{
+        playerPoints,
+        adsWatchedToday,
+        canWatchAd,
+        isLoading,
+        error,
+        updatePlayerPoints,
+        watchAd,
+      }}
+    >
+      {children}
+    </GameEconomyContext.Provider>
+  );
 }
 
 export function useGameEconomy() {

@@ -1,30 +1,30 @@
-// src/types/index.ts
-
-import { TranslationKeys } from "@/i18n/translations";
-
 export type Id = string;
+
+export enum UserRole {
+  Child = "child",
+  Parent = "parent",
+}
 
 export interface User {
   id: Id;
-  email: string;
   nickname: string;
-  role: "child" | "parent" | "admin";
+  email: string;
+  role: UserRole;
+  avatarUrl?: string;
 }
 
 export interface ChatMessage {
   id: Id;
   senderId: Id;
   recipientId: Id;
-  phraseKey: TranslationKeys; // Use TranslationKeys for predefined phrases
-  timestamp: number; // Unix timestamp
+  phraseKey: string; // Key for predefined phrase
+  timestamp: number;
 }
 
 export interface WorldLocation {
   id: Id;
-  nameKey: TranslationKeys;
-  descriptionKey: TranslationKeys;
-  coordinates: { x: number; y: number }; // Percentage coordinates
-  jobsAvailable: Id[]; // Array of job IDs
+  nameKey: string; // i18n key for location name
+  descriptionKey: string; // i18n key for description
+  coordinates: { x: number; y: number }; // Percentage for flexible positioning
+  jobsAvailable: Id[]; // List of job IDs available at this location
 }
-
-// Add other global types here as needed
